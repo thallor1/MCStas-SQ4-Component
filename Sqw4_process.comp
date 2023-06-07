@@ -1,0 +1,84 @@
+/*******************************************************************************
+*
+* McStas, neutron ray-tracing package
+*         Copyright 1997-2002, All rights reserved
+*         Risoe National Laboratory, Roskilde, Denmark
+*         Institut Laue Langevin, Grenoble, France
+*
+* Component: Sqw4_process
+*
+* %I
+* Written by: Tom Halloran
+* Date: June 2023
+* Origin: NIST
+* 
+* An extension of Single_crystal_inelastic for UNION processes. Based 
+* heavily on Single_crystal_inelastic by Duc Le, and follows design philosophy
+* of Isotropic_SQW. Not intended to handle things like sample mosaic.
+*
+* %D
+* The component handles a 4D S(q,w) material dispersion, and scatters neutrons 
+* out of it. It is based on the Isotropic_Sqw methodology, extended to 4D. 
+*
+* 
+*
+* 4D S(q,w) data files
+* --------------------
+*
+* The input data file derives from other McStas formats. It may contain structural
+* information as in Lau/Laz files, and a list of S(q,w) [one per row] with 5 columns
+**
+**   [ H K L E S(q,w) ]
+**
+* An example file example.sqw4 is provided in the McStas/Data directory.
+*
+* You may generate such files using <a href="http://ifit.mccode.org">iFit </a> such as:
+*
+*   s = sqw_vaks('defaults');             % a 4D model
+*   d = iData(s);                         % use default coarse grid for axes [-0.5:0.5]
+*   saveas(d, 'sx_coh.sqw4', 'mcstas');   % export to 4D Sqw file
+*
+* %VALIDATION:
+* None
+* 
+* %P
+* INPUT PARAMETERS:
+* sqw:    [string]   Name of a 4d S(q,w) file - example.sqw4 is included in your installation
+* ax: [AA / AA^-1]    Coordinates of first (direct/recip) unit cell vector.
+* ay: [AA / AA^-1]    a on y axis
+* az: [AA / AA^-1]    a on z axis
+* bx: [AA / AA^-1]       Coordinates of second (direct/recip) unit cell vector.
+* by: [AA / AA^-1]       b on y axis
+* bz: [AA / AA^-1]       b on z axis
+* cx: [AA / AA^-1]       Coordinates of third (direct/recip) unit cell vector.
+* cy: [AA / AA^-1]       c on y axis
+* cz: [AA / AA^-1]       c on z axis
+* aa: [deg]       Unit cell angles alpha, beta and gamma. Then uses norms of vectors a,b and c as lattice parameters.
+* bb: [deg]       Beta angle. 
+* cc: [deg]       Gamma angle.
+* order: [1]    Limit multiple scattering up to given order
+*              (0: all, 1: first, 2: second, ...).
+* powder: [1]          Flag to indicate powder mode, for simulation of Debye-Scherrer cones via 
+* random crystallite orientation. A powder texture can be approximated with 0
+* p_transmit: [1] Monte Carlo probability for neutrons to be transmitted
+*               without any scattering. Used to improve statistics from
+*               weak reflections.
+* sigma_abs: [barns]  Absorption cross-section per unit cell at 2200 m/s. 
+* barns: [1]      Flag to indicate if |F|^2 from 'reflections' is in barns or fm^2. 
+*              barns=1 for laz and isotropic constant elastic scattering (reflections=NULL), 
+*              barns=0 for lau type files.
+* RX: [m]       Radius of horizontal along X lattice curvature. flat for 0.
+* RY: [m]       Radius of vertical lattice curvature. flat for 0.
+* RZ: [m]       Radius of horizontal along Z lattice curvature. flat for 0.
+* %E
+****************************************************************************/
+
+DEFINE COMPONENT Single_crystal_process // Remember to change the name of process here
+DEFINITION PARAMETERS ()
+SETTING PARAMETERS(string sqw=0, 
+			ax = 0, ay = 0, az = 0,
+            bx = 0, by = 0, bz = 0,
+            cx = 0, cy = 0, cz = 0,
+	    	aa=0, bb=0, cc=0, order=0, powder=0, PG=0,
+            interact_fraction=-1, packing_factor=1, string init="init")
+OUTPUT PARAMETERS ()

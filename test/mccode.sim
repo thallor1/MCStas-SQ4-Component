@@ -1,0 +1,27 @@
+begin instrument:
+  Creator: mcstas 3.3
+  Source: simplest_case.instr
+  Parameters:  A3
+  Trace_enabled: no
+  Default_main: yes
+  Embedded_runtime: yes
+end instrument
+
+begin simulation
+Date: Wed Jun 07 12 01 2023
+Ncount: 1000000
+Numpoints: 11
+Param: A3 = 7, A3 = 12
+end simulation
+
+begin data
+type: multiarray_1d(11)
+title: Scan of A3
+xvars: A3
+yvars: (SampleIn_I,SampleIn_ERR) (monitorF_I,monitorF_ERR) (Sqqw_I,Sqqw_ERR) (Sqqw_I,Sqqw_ERR) (Sqqw_I,Sqqw_ERR) (Sqqw_I,Sqqw_ERR) (Sqqw_I,Sqqw_ERR) (Sqqw_I,Sqqw_ERR) (Sqqw_I,Sqqw_ERR) (Sqqw_I,Sqqw_ERR) (Sqqw_I,Sqqw_ERR) (Sqqw_I,Sqqw_ERR) (Sqqw_I,Sqqw_ERR) (Sqqw_I,Sqqw_ERR) (Sqqw_I,Sqqw_ERR) (Sqqw_I,Sqqw_ERR) (Sqqw_I,Sqqw_ERR) (Sqqw_I,Sqqw_ERR)
+xlabel: 'A3'
+ylabel: 'Intensity'
+xlimits: 12 7
+filename: mccode.dat
+variables: A3 SampleIn_I SampleIn_ERR monitorF_I monitorF_ERR Sqqw_I Sqqw_ERR Sqqw_I Sqqw_ERR Sqqw_I Sqqw_ERR Sqqw_I Sqqw_ERR Sqqw_I Sqqw_ERR Sqqw_I Sqqw_ERR Sqqw_I Sqqw_ERR Sqqw_I Sqqw_ERR Sqqw_I Sqqw_ERR Sqqw_I Sqqw_ERR Sqqw_I Sqqw_ERR Sqqw_I Sqqw_ERR Sqqw_I Sqqw_ERR Sqqw_I Sqqw_ERR Sqqw_I Sqqw_ERR Sqqw_I Sqqw_ERR
+end data
