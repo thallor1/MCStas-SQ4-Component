@@ -1,0 +1,48 @@
+McStas simulation description file for test_instrument.
+Date:    Wed Jul 12 00:42:22 2023
+Program: 
+
+begin instrument: test_instrument
+  File: /home/tjh/Documents/SQW4_testing/scandir/mcscript_test_monitorND_A3m85p142deg/mccode
+  Source: test_instrument.instr
+  Parameters:  A3(double) Ei(double)
+  Trace_enabled: yes
+  Default_main: yes
+  Embedded_runtime: yes
+end instrument
+
+begin simulation: /home/tjh/Documents/SQW4_testing/scandir/mcscript_test_monitorND_A3m85p142deg
+  Format: McCode with text headers
+  URL: http://www.mccode.org
+  Creator: 
+  Instrument: test_instrument.instr
+  Ncount: 1000000
+  Trace: no
+  Gravitation: no
+  Seed: 1689136942459933
+  Directory: /home/tjh/Documents/SQW4_testing/scandir/mcscript_test_monitorND_A3m85p142deg
+  Param: A3=-85.1419
+  Param: Ei=10
+end simulation
+
+begin data
+  Date: Wed Jul 12 00:47:27 2023 (1689137247)
+  type: array_2d(200, 60)
+  Source: test_instrument (test_instrument.instr)
+  component: monitornd
+  position: 0 0 2
+  title:  Intensity Angle Energy Monitor (Banana) [out] per bin
+  Ncount: 2000000
+  filename: banana_det_theta_E.dat
+  statistics: X0=73.5003; dX=12.9258; Y0=6.45656; dY=1.0829;
+  signal: Min=0; Max=28.0628; Mean=0.208387;
+  values: 2500.64 78.6137 41418
+  xvar: Lo
+  yvar: En
+  xlabel: Longitude [deg]
+  ylabel: Energy [meV]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -90 90 5 9.5
+  variables: I I_err N
+end data

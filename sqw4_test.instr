@@ -1,0 +1,147 @@
+/*******************************************************************************
+*         McStas instrument definition URL=http://www.mcstas.org
+*
+* Instrument: test (rename also the example and DEFINE lines below)
+*
+* %Identification
+* Written by: <a href="mailto:duc.le@stfc.ac.uk">Duc Le</a>
+* Date: Feb 2015
+* Origin: ISIS
+* %INSTRUMENT_SITE:Tests_samples
+*
+* Test instrument for the Single_crystal_inelastic component.
+*
+* %Description
+* Simple test instrument for Single_crystal_inelastic in Horace mode
+*
+* Example: mcrun Test_Single_crystal_inelastic.instr
+*
+* once your instrument is written and functional:
+* - replace INSTRUMENT_SITE entry above with your Institution name as a single word
+* - rename the instrument name after DEFINE INSTRUMENT below
+* - update the parameter help in the following Parameters section
+* - update the instrument description, and better add a usage example with a
+*     sensible parameter set.
+*
+* %Parameters
+* E:    [meV] Mean energy produced at the source
+* DE:   [meV] Energy spread produced at the source
+* HDIV: [deg] Horizontal divergence from the source
+* VDIV: [deg] Vertical divergence from the source
+* OM:   [deg] Sample orientation around y
+* TH:   [deg] Sample orientation around x
+* FI:   [deg] Sample orientation around z
+* SQW:  [str] 4D Sqw input file
+*
+* %Link
+* Duc Le (2015) - duc.le@stfc.ac.uk
+*
+* %End
+*******************************************************************************/
+
+DEFINE INSTRUMENT sqw4_test(E=10, DE=0.1, HDIV=0.02, VDIV=0.02, A3=0, 
+  string SQW="sqw_calc_result.sqw4",inelastic=1)
+DECLARE
+%{
+%}
+
+USERVARS
+%{
+  /* Flags for detector */
+  double Samplechoice;
+  double vix;
+  double viy;
+  double viz;
+%}
+
+INITIALIZE
+%{
+#include <time.h>
+
+%}
+
+TRACE
+
+COMPONENT init = Union_init()
+AT (0,0,0) ABSOLUTE
+
+COMPONENT a1 = Progress_bar()
+AT (0,0,0) ABSOLUTE
+
+
+COMPONENT target = Arm()  /*no sample in the simulation*/
+AT (0,0,1) ABSOLUTE
+
+COMPONENT sample_sqw4 = Sqw4_process(sqw=SQW,
+            recip_cell=0, barns=1,
+            ax = 6.283, ay = 0, az = 0,
+            bx = 0, by = 6.283, bz = 0,
+            cx = 0, cy = 0, cz = 6.283,
+            aa=90, bb=90, cc=90,
+            interact_fraction=-1, packing_factor=1, init="init")
+AT (0,0,0) ABSOLUTE
+ROTATED (0,0,0) ABSOLUTE
+
+COMPONENT sample_incoherent = Incoherent_process(sigma=10.0,packing_factor=1)
+AT (0,0,0) ABSOLUTE
+
+COMPONENT Sample = Union_make_material(my_absorption=0, process_string="sample_sqw4")
+AT (0,0,0) ABSOLUTE
+ROTATED (0,0,0) ABSOLUTE
+
+COMPONENT source = Source_gen(
+    radius = 0.0775, focus_xw = HDIV, focus_yh = VDIV,
+    E0 = E, dE = DE, I1 = 1e10, verbose=1)
+AT (0,0,0) RELATIVE a1 ROTATED (0,0,0) RELATIVE a1
+EXTEND %{
+  vix=vx;viy=vy;viz=vz;
+%}
+
+COMPONENT crystal_assembly = Arm()
+AT (0,0,0) RELATIVE target
+ROTATED (0,A3,0) RELATIVE target
+
+COMPONENT sample_cube = Union_box(xwidth=0.01,yheight=0.01,zdepth=0.01, priority=100, material_string="Sample")
+AT (0,0,0) RELATIVE crystal_assembly
+ROTATED (0,0,0) RELATIVE crystal_assembly
+
+COMPONENT test_sample = Union_master()
+AT (0,0,0) ABSOLUTE
+EXTEND %{
+// Remove direct beam
+if(!SCATTERED) ABSORB;
+%}
+
+
+/*
+COMPONENT sampleIn = Monitor_nD(
+  xwidth=2.0*0.1,yheight=2.0*0.1,zdepth=0.001, options="x y",bins=100,restore_neutron=1)
+AT (0,0,0.98) RELATIVE a1 ROTATED (0,0,0) RELATIVE a1
+*/
+
+
+/*
+COMPONENT monitor = PSDE_4PI(filename="det4pi.dat",radius=0.25,nx=360,ny=180,ne=250,Emin=0,Emax=E*2,restore_neutron=0)
+  AT (0, 0, 1) RELATIVE a1 ROTATED (0,0,0) RELATIVE a1
+*/
+/*
+COMPONENT monitorE = E_4PI(filename="e4pi.dat",ne=50,Emin=5,Emax=9)
+  AT (0, 0, 1.01) RELATIVE a1 
+*/
+
+// To easily track the SQQ process we should probably also rotate the qa and qb axes...
+COMPONENT Sqqwmonitor = Sqq_w_monitor(filename="qa_vs_qb",nE=3,nqa=201,nqb=201,qamin=-2,qamax=2.0,qbmin=-2,
+  qbmax=2,Emin=5, Emax=9.5, yheight=0.5, vix="vix", viy="viy", viz="viz",radius = 0.3,
+  qax = 1, qaz=0, qbx=0,qbz=1)
+AT (0,0,1.00) RELATIVE a1 ROTATED (0,A3,0) RELATIVE a1
+
+/*
+COMPONENT cylmon = PSDcyl_monitor(nr=120, ny=40, filename="Output.cyl", yheight=0.5, radius=0.1,restore_neutron=1)
+AT (0,0,0) RELATIVE sample 
+*/
+
+COMPONENT stop = Union_stop()
+AT (0,0,0) ABSOLUTE
+END
+
+
