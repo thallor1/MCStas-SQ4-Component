@@ -2,7 +2,7 @@
  * Format:     ANSI C source code
  * Creator:    McStas <http://www.mcstas.org>
  * Instrument: sqw4_test.instr (sqw4_test)
- * Date:       Tue Jul 11 16:18:21 2023
+ * Date:       Sat Jul 15 20:13:02 2023
  * File:       ./sqw4_test.c
  * CFLAGS= -I@MCCODE_LIB@/share/ -DFUNNEL 
  */
@@ -18382,7 +18382,8 @@ void off_display(off_struct data)
       struct hklw_store *stored;   /* Stored list of allowed hkl for particular ki vector */
       int    nb_reuses, nb_refl, nb_refl_count;
       int picked_ref;             /* Index of last particular reflection */
-      int num_bad_end, num_stored_end, num_searched_end /* Keeps track of how often optimizations are used */
+      int num_bad_end, num_stored_end, num_searched_end; /* Keeps track of how often optimizations are used */
+      double dTheta, dKmag; /* parameters used to consider stored K-values a "Match", in degrees and ang^-1 respectively */
     };
 
   
@@ -18531,21 +18532,21 @@ void off_display(off_struct data)
     } else {
       if (!info->recip) {
         printf("SQW4: %s structure a=[%g,%g,%g] b=[%g,%g,%g] c=[%g,%g,%g] \n",
-	       (flag ? "INC" : SC_file), info->m_ax ,info->m_ay ,info->m_az,
-	       info->m_bx ,info->m_by ,info->m_bz,
-	       info->m_cx ,info->m_cy ,info->m_cz);
+         (flag ? "INC" : SC_file), info->m_ax ,info->m_ay ,info->m_az,
+         info->m_bx ,info->m_by ,info->m_bz,
+         info->m_cx ,info->m_cy ,info->m_cz);
       } else {
         printf("SQW4: %s structure a*=[%g,%g,%g] b*=[%g,%g,%g] c*=[%g,%g,%g] \n",
-	       (flag ? "INC" : SC_file), info->m_ax ,info->m_ay ,info->m_az,
-	       info->m_bx ,info->m_by ,info->m_bz,
-	       info->m_cx ,info->m_cy ,info->m_cz);
+         (flag ? "INC" : SC_file), info->m_ax ,info->m_ay ,info->m_az,
+         info->m_bx ,info->m_by ,info->m_bz,
+         info->m_cx ,info->m_cy ,info->m_cz);
       }
     }
     /* Compute reciprocal or direct lattice vectors. */
     if (!info->recip) {
       vec_prod(tmp_x, tmp_y, tmp_z,
-	       info->m_bx, info->m_by, info->m_bz,
-	       info->m_cx, info->m_cy, info->m_cz);
+         info->m_bx, info->m_by, info->m_bz,
+         info->m_cx, info->m_cy, info->m_cz);
       info->V0 = fabs(scalar_prod(info->m_ax, info->m_ay, info->m_az, tmp_x, tmp_y, tmp_z));
       printf("V0=%g\n", info->V0);
       printf("SQW4: a=[%g,%g,%g]\n",info->m_ax,info->m_ay,info->m_az);
@@ -18582,8 +18583,8 @@ void off_display(off_struct data)
       info->csz = info->m_cz;
       
       vec_prod(tmp_x, tmp_y, tmp_z,
-	       info->bsx/(2*PI), info->bsy/(2*PI), info->bsz/(2*PI),
-	       info->csx/(2*PI), info->csy/(2*PI), info->csz/(2*PI));
+         info->bsx/(2*PI), info->bsy/(2*PI), info->bsz/(2*PI),
+         info->csx/(2*PI), info->csy/(2*PI), info->csz/(2*PI));
       info->V0 = 1/fabs(scalar_prod(info->asx/(2*PI), info->asy/(2*PI), info->asz/(2*PI), tmp_x, tmp_y, tmp_z));
       printf("V0=%g\n", info->V0);
       
@@ -18695,11 +18696,12 @@ void off_display(off_struct data)
     int last_stored = info->last_stored;
     int nhklw=0; // Number of points that satisfy all scattering requirements.
     int kin_flag=0, fail_flag=0; // Flag to stop the search of the overall list
-    double cpu_time, init_time, final_time; // for debugging 
+    double cpu_time, cpu_time2,init_time, final_time; // for debugging 
 
     int print_times=1;
 
-    clock_t start_T, end_T;
+    clock_t start_T,start_T2, end_T;
+
     if (print_times==1){
       start_T = clock();
     }
@@ -18722,7 +18724,7 @@ void off_display(off_struct data)
       kmag = sqrt(info->badx[i1]*info->badx[i1] + info->bady[i1]*info->bady[i1] + info->badz[i1]*info->badz[i1]);
       kdir = ((kix*info->badx[i1])+ (kiy*info->bady[i1])+  (kiz*info->badz[i1]))/kmag/kimod;
       kdir = acos(kdir)*(1.0/DEG2RAD); // Now this is the angle between the two k-vectors in deg
-      if((fabs(kdir))<0.5 && fabs(kmag-kimod)<5e-3) 
+      if((fabs(kdir))<info->dTheta && fabs(kmag-kimod)<info->dKmag) 
         {
           info->num_bad_end++;
           foundflag=1;
@@ -18740,10 +18742,13 @@ void off_display(off_struct data)
       end_T=clock();
       cpu_time = ((double) (end_T-start_T))/CLOCKS_PER_SEC;
 
-      printf("To search entire bad list requires cpu_time=%6e s\n",cpu_time);
+      //printf("To search entire bad list requires cpu_time=%6e s\n",cpu_time);
     }
     
     // Check previously generated list of ki's which can scatter, and see if this ki matches, saving us to go through the S(q,w) list again.
+    if(print_times==1){
+      start_T=clock();
+    }
     for(i1=0; i1<info->last_stored; i1++) 
         {
           if(info->stored[i1].nhklw>0) 
@@ -18752,7 +18757,8 @@ void off_display(off_struct data)
               kmag = sqrt(info->stored[i1].kx*info->stored[i1].kx + info->stored[i1].ky*info->stored[i1].ky + info->stored[i1].kz*info->stored[i1].kz);
               kdir = ((kix*info->stored[i1].kx) + (kiy*info->stored[i1].ky) + (kiz*info->stored[i1].kz))/kmag/kimod;
               kdir = acos(fabs(kdir))*(1.0/DEG2RAD);
-              if((fabs(kdir))<0.5 && fabs(kmag-kimod)<5e-3) 
+              //printf("kdir condition: %d, kmag condition: %d\n",fabs(kdir)<0.5,fabs(kmag-kimod)<2e-3);
+              if((fabs(kdir))<info->dTheta && fabs(kmag-kimod)<info->dKmag) 
                 {
                   int j_mapped;
                   j_mapped = rand0max(info->stored[i1].nhklw);
@@ -18826,7 +18832,9 @@ void off_display(off_struct data)
 
     if(nhklw>0 && fail_flag==0)
       {
-        
+        if(print_times==1){
+          start_T2=clock();
+        }        
         // Select a random index between 0 and maxi
         // This value is unacceptable by energy conservation. Mark it as the final point.
         maxi = nhklw-1;
@@ -18861,10 +18869,11 @@ void off_display(off_struct data)
         i3=0;
         i3=0;
         info->last_stored++;
-        if(info->last_stored>=info->stored_ki_max){
+        if(info->last_stored>=info->stored_ki_max || print_times==1){
           printf("Stored %d points. \n",info->last_stored);
-
-          info->last_stored=0; // overwrite old values.
+          if(info->last_stored>=info->stored_ki_max){
+            info->last_stored=0;
+          } // overwrite old values.
         }
         // This saves us from iterating through the sqw list again if a similar ki is encountered. 
         free(tmp_list);
@@ -18875,10 +18884,12 @@ void off_display(off_struct data)
         {
           end_T = clock();
           cpu_time = ((double) (end_T-start_T))/CLOCKS_PER_SEC;
+          cpu_time2 = ((double)(end_T-start_T2))/CLOCKS_PER_SEC;
           printf("For full search cpu_time=%6e s\n",cpu_time);
         }
 
         //printf("Returning on j=%d\n",j);
+
         return j;
       }
     //free(tmp_list);
@@ -18952,16 +18963,17 @@ int Sqw4_physics_my(double *my, double *k_initial, union data_transfer_union dat
         double coh_xsect = 0, coh_refl = 0;
         
         /* call hklw_search */
-        choice_i = hklw_select_union(hklw_info->list, hklw_info, hklw_info->count, kix, kiy, kiz); /* CPU consuming */
+        //choice_i = hklw_select_union(hklw_info->list, hklw_info, hklw_info->count, kix, kiy, kiz); /* CPU consuming */
         //printf("hklw_search returned j=%d\n",choice_i);
         //choice_i = hklw_info->picked_ref;
-        S=hklw_info->list[choice_i].SQW;
+        //S=hklw_info->list[choice_i].SQW;
+        S=100; // This is clearly not right, needs to be fixed. 
         //printf("S=%4f\n",S);
-        if (choice_i==0)
-        {
+        //if (choice_i==0)
+        //{
           //Should absorb, no possible scattering process. 
-          S=0;
-        }
+        //  S=0;
+        //}
         coh_xsect = S;
         coh_refl = S;
         //printf("coh_xsect=%d\n",coh_xsect);
@@ -42888,6 +42900,8 @@ struct _struct_Sqw4_process_parameters {
   MCNUM max_bad;
   MCNUM max_stored_ki;
   char init[16384];
+  MCNUM stored_dTheta;
+  MCNUM stored_dkmag;
   /* Component type 'Sqw4_process' private parameters */
   struct Sqw4_physics_storage_struct  Sqw4_storage;
   struct hklw_info_struct_union  hklw_info_union;
@@ -43492,7 +43506,7 @@ int _target_setpos(void)
 /* component sample_sqw4=Sqw4_process() SETTING, POSITION/ROTATION */
 int _sample_sqw4_setpos(void)
 { /* sets initial component parameters, position and rotation */
-  SIG_MESSAGE("[_sample_sqw4_setpos] component sample_sqw4=Sqw4_process() SETTING [Sqw4_process.comp:849]");
+  SIG_MESSAGE("[_sample_sqw4_setpos] component sample_sqw4=Sqw4_process() SETTING [Sqw4_process.comp:862]");
   stracpy(_sample_sqw4_var._name, "sample_sqw4", 16384);
   stracpy(_sample_sqw4_var._type, "Sqw4_process", 16384);
   _sample_sqw4_var._index=4;
@@ -43506,11 +43520,11 @@ int _sample_sqw4_setpos(void)
   _sample_sqw4_var._parameters.ay = 0;
   _sample_sqw4_var._parameters.az = 0;
   _sample_sqw4_var._parameters.bx = 0;
-  _sample_sqw4_var._parameters.by = 6.283;
-  _sample_sqw4_var._parameters.bz = 0;
+  _sample_sqw4_var._parameters.by = 0;
+  _sample_sqw4_var._parameters.bz = 6.283;
   _sample_sqw4_var._parameters.cx = 0;
-  _sample_sqw4_var._parameters.cy = 0;
-  _sample_sqw4_var._parameters.cz = 6.283;
+  _sample_sqw4_var._parameters.cy = 6.283;
+  _sample_sqw4_var._parameters.cz = 0;
   _sample_sqw4_var._parameters.aa = 90;
   _sample_sqw4_var._parameters.bb = 90;
   _sample_sqw4_var._parameters.cc = 90;
@@ -43522,6 +43536,8 @@ int _sample_sqw4_setpos(void)
     stracpy(_sample_sqw4_var._parameters.init, "init" ? "init" : "", 16384);
   else 
   _sample_sqw4_var._parameters.init[0]='\0';
+  _sample_sqw4_var._parameters.stored_dTheta = 1;
+  _sample_sqw4_var._parameters.stored_dkmag = 2e-3;
 
 
   /* component sample_sqw4=Sqw4_process() AT ROTATED */
@@ -44096,11 +44112,13 @@ _class_Sqw4_process *class_Sqw4_process_init(_class_Sqw4_process *_comp
   #define max_bad (_comp->_parameters.max_bad)
   #define max_stored_ki (_comp->_parameters.max_stored_ki)
   #define init (_comp->_parameters.init)
+  #define stored_dTheta (_comp->_parameters.stored_dTheta)
+  #define stored_dkmag (_comp->_parameters.stored_dkmag)
   #define Sqw4_storage (_comp->_parameters.Sqw4_storage)
   #define hklw_info_union (_comp->_parameters.hklw_info_union)
   #define global_process_element (_comp->_parameters.global_process_element)
   #define This_process (_comp->_parameters.This_process)
-  SIG_MESSAGE("[_sample_sqw4_init] component sample_sqw4=Sqw4_process() INITIALISE [Sqw4_process.comp:849]");
+  SIG_MESSAGE("[_sample_sqw4_init] component sample_sqw4=Sqw4_process() INITIALISE [Sqw4_process.comp:862]");
 
   // Single crystal initialize
   double as, bs, cs;
@@ -44141,6 +44159,8 @@ _class_Sqw4_process *class_Sqw4_process_init(_class_Sqw4_process *_comp
   hklw_info_union.num_bad_end=0;
   hklw_info_union.num_stored_end=0;
   hklw_info_union.num_searched_end=0;
+  hklw_info_union.dTheta = stored_dTheta;
+  hklw_info_union.dKmag = stored_dkmag;
   //int num_bad_end, num_stored_end, num_searched_end /* Keeps track of how often optimizations are used */
 
 
@@ -44236,6 +44256,8 @@ _class_Sqw4_process *class_Sqw4_process_init(_class_Sqw4_process *_comp
   #undef max_bad
   #undef max_stored_ki
   #undef init
+  #undef stored_dTheta
+  #undef stored_dkmag
   #undef Sqw4_storage
   #undef hklw_info_union
   #undef global_process_element
@@ -46374,11 +46396,13 @@ _class_Sqw4_process *class_Sqw4_process_trace(_class_Sqw4_process *_comp
   #define max_bad (_comp->_parameters.max_bad)
   #define max_stored_ki (_comp->_parameters.max_stored_ki)
   #define init (_comp->_parameters.init)
+  #define stored_dTheta (_comp->_parameters.stored_dTheta)
+  #define stored_dkmag (_comp->_parameters.stored_dkmag)
   #define Sqw4_storage (_comp->_parameters.Sqw4_storage)
   #define hklw_info_union (_comp->_parameters.hklw_info_union)
   #define global_process_element (_comp->_parameters.global_process_element)
   #define This_process (_comp->_parameters.This_process)
-  SIG_MESSAGE("[_sample_sqw4_trace] component sample_sqw4=Sqw4_process() TRACE [Sqw4_process.comp:967]");
+  SIG_MESSAGE("[_sample_sqw4_trace] component sample_sqw4=Sqw4_process() TRACE [Sqw4_process.comp:982]");
 
     // Trace should be empty, the simulation is done in Union_master
 #ifndef NOABSORB_INF_NAN
@@ -46421,6 +46445,8 @@ _class_Sqw4_process *class_Sqw4_process_trace(_class_Sqw4_process *_comp
   #undef max_bad
   #undef max_stored_ki
   #undef init
+  #undef stored_dTheta
+  #undef stored_dkmag
   #undef Sqw4_storage
   #undef hklw_info_union
   #undef global_process_element

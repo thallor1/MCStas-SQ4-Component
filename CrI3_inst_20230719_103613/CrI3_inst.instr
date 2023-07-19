@@ -1,0 +1,107 @@
+/********************************************************************************
+* 
+* McStas, neutron ray-tracing package
+*         Copyright (C) 1997-2008, All rights reserved
+*         Risoe National Laboratory, Roskilde, Denmark
+*         Institut Laue Langevin, Grenoble, France
+* 
+* This file was written by McStasScript, which is a 
+* python based McStas instrument generator written by 
+* Mads Bertelsen in 2019 while employed at the 
+* European Spallation Source Data Management and 
+* Software Centre
+* 
+* Instrument CrI3_inst
+* 
+* %Identification
+* Written by: Python McStas Instrument Generator
+* Date: 10:29:01 on July 19, 2023
+* Origin: ESS DMSC
+* %INSTRUMENT_SITE: Generated_instruments
+* 
+* 
+* %Parameters
+* 
+* %End 
+********************************************************************************/
+
+DEFINE INSTRUMENT CrI3_inst (
+A3 = 0, // Sample A3 Rotation angle.
+Ei = 30 // Incident neutron energy mean.
+)
+
+DECLARE 
+%{
+%}
+
+INITIALIZE 
+%{
+// Start of initialize for generated CrI3_inst
+%}
+
+TRACE 
+COMPONENT progress = Progress_bar()
+AT (0,0,0) ABSOLUTE
+
+COMPONENT source = Source_gen(
+ radius = 0.0775, focus_xw = 0.01,
+ focus_yh = 0.01, E0 = Ei,
+ dE = 0.2, I1 = 1E+10,
+ verbose = 1)
+AT (0,0,0) ABSOLUTE
+ROTATED (0,0,0) ABSOLUTE
+
+COMPONENT crystal_assembly = Arm()
+AT (0,0,2) RELATIVE source
+ROTATED (0,A3,0) RELATIVE source
+
+COMPONENT init = Union_init()
+AT (0,0,0) ABSOLUTE
+
+COMPONENT sample_sqw4 = Sqw4_process(
+ sqw = "spinw_CrI3.sqw4", recip_cell = 0,
+ barns = 1, ax = 6.867,
+ ay = 0, az = 0,
+ bx = -3.4335, by = 0,
+ bz = 5.947, cx = 0,
+ cy = 19.807, cz = 0,
+ aa = 90, bb = 90,
+ cc = 120, interact_fraction = -1,
+ max_bad = 100000, max_stored_ki = 100000,
+ stored_dTheta = 0.1, stored_dkmag = 0.0001)
+AT (0,0,0) ABSOLUTE
+ROTATED (0,0,0) ABSOLUTE
+
+COMPONENT sample_material = Union_make_material(
+ process_string = "sample_sqw4", my_absorption = 0)
+AT (0,0,0) ABSOLUTE
+
+COMPONENT sample_box = Union_box(
+ material_string = "sample_material", priority = 100,
+ xwidth = 0.01, yheight = 0.01,
+ zdepth = 0.01)
+AT (0,0,0) RELATIVE crystal_assembly
+ROTATED (0,0,0) RELATIVE crystal_assembly
+
+COMPONENT master = Union_master()
+AT (0,0,0) ABSOLUTE
+EXTEND %{
+// Remove direct beam
+if(!SCATTERED) ABSORB;
+%}
+
+COMPONENT stop = Union_stop()
+AT (0,0,0) ABSOLUTE
+
+COMPONENT monitor_N = Monitor_nD(
+ yheight = 0.4, radius = 0.3,
+ options = "banana, theta limits=[-90,90], bins=360, energy limits=[3.0,29.7], bins=120", filename = "banana_det_theta_E.dat")
+AT (0,0,0.0) RELATIVE crystal_assembly
+ROTATED (0,0,0) ABSOLUTE
+
+FINALLY 
+%{
+// Start of finally for generated CrI3_inst
+%}
+
+END

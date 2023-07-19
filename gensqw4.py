@@ -38,13 +38,13 @@ params = [m1x,m1y,m1z,m2x,m2y,m2z,gap1,gap2]
 
 
 #Delta function example.
-delta = 0.01
+delta = 0.01 #Need some finite amount of Q-E space to sample
+
 qx = np.linspace(1-delta,1+delta,51)
 qy = np.linspace(0.5-delta,0.5+delta,51)
 qz = np.linspace(0.0-delta,0.0+delta,21)
 omega = np.linspace(1.0-delta,1.0+delta,50)
 nH,nK,nL,nE = 10,10,10,10
-Qy, Qx, Qz, E = np.meshgrid(qy,qx,qz,omega)
 M_delta = sample_sqw4(calc_sqw4_delta,[],qx,qy,qz,omega,nH,nK,nL,nE,    
     lat_a=a,lat_b=b,lat_c=c,
     alpha=alpha,beta=beta,gamma=gamma,
@@ -66,20 +66,24 @@ M_square = sample_sqw4(calc_sqw4_delta,[],qx,qy,qz,omega,nH,nK,nL,nE,
     fname = 'sqw_box_result.sqw4')
 
 #Spin wave example.
-qx = np.linspace(-1,1,51)
-qy = np.linspace(-1,1,51)
+qx = np.linspace(-2,2,51)
+qy = np.linspace(-2,2,51)
 qz = np.linspace(-0.05,0.05,21)
-omega = np.linspace(0.2,6,50)
+omega = np.linspace(0.2,5,100)
 nH,nK,nL,nE = 50,50,5,40
+force_dE1 = np.linspace(0.1,3,25)
+force_dE2 = np.linspace(3.7,4.8,15)
+force_omegas = np.concatenate((force_dE1,force_dE2))
+
 Qy, Qx, Qz, E = np.meshgrid(qy,qx,qz,omega)
 M = sample_sqw4(calc_sqw4_example,params,qx,qy,qz,omega,nH,nK,nL,nE,
     lat_a=a,lat_b=b,lat_c=c,
     alpha=alpha,beta=beta,gamma=gamma,
     xnoise=True,ynoise=True,znoise=True,omeganoise=True,
-    fname = 'sqw_spinwave_result.sqw4')
+    fname = 'sqw_spinwave_result.sqw4',force_omegas=force_omegas)
 
 print("Sampling is done. ")
-#Let's make a 3D scatterplot to show how well the routine works. 
+# make a 3D scatterplot to show how well the routine works. 
 Imax = np.log(np.max(M[:,4]))
 Imin = np.log(np.min(M[:,4]))
 colors = get_color(np.log(M[:,4]),vmin=Imin,vmax=Imax,cmap='hot')
@@ -94,12 +98,12 @@ if plots==True:
     fig,ax = plt.subplots(1,2,figsize=(8,3))
     #First a S(Qx,Qy,Qz=0.5,E=2) slice. 
     SQxQy_i = np.logical_and([np.abs(M[:,2]-0.0)<0.2],[np.abs(M[:,3]-2.1)<0.1]).flatten()
-    colors = get_color(M[:,4],vmin=0,vmax=np.mean(M[:,4])*5,cmap='rainbow')
-    ax[0].scatter(M[SQxQy_i][:,0],M[SQxQy_i][:,1],c=colors[SQxQy_i],marker='s',linewidths=0,s=3,rasterized=True)
+    colors = get_color(M[:,4],vmin=0,vmax=np.mean(M[:,4])*0.5,cmap='rainbow')
+    ax[0].scatter(M[SQxQy_i][:,0],M[SQxQy_i][:,1],c=colors[SQxQy_i],marker='s',linewidths=0,s=4,rasterized=True,alpha=0.5)
     #Now a S(Qx,Qy=0,Qz=0.5,E) slice
     SQxE_i = np.logical_and([np.abs(M[:,1]-0.0)<0.05],[np.abs(M[:,2]-0.0)<0.2]).flatten()
 
-    ax[1].scatter(M[SQxE_i][:,0],M[SQxE_i][:,3],c=colors[SQxE_i],marker='s',linewidths=0,s=3,rasterized=True,alpha=0.5)
+    ax[1].scatter(M[SQxE_i][:,0],M[SQxE_i][:,3],c=colors[SQxE_i],marker='s',linewidths=0,s=4,rasterized=True,alpha=0.5)
     ax[0].set_xlabel('[H00] (r.l.u.)')
     ax[0].set_ylabel('[0K0] (r.l.u.)')
     ax[1].set_xlabel('[H00] (r.l.u.)')
@@ -108,7 +112,7 @@ if plots==True:
     ax[1].set_title(r"$k$=[-0.1,0.1], $l$=[-0.2,0.2]")
     ax[1].set_ylabel(r'$\hbar\omega$ (meV)')
 
-    fig.savefig('sqw4_sampling_fig.pdf',bbox_inches='tight',dpi=300)
+    fig.savefig('sqw4_spinwave_sampling_fig.pdf',bbox_inches='tight',dpi=300)
     fig.show()
 
     #Plot the delta function
@@ -139,11 +143,11 @@ if plots==True:
     fig,ax = plt.subplots(1,2,figsize=(8,3))
     fig.subplots_adjust(hspace=0.2,wspace=0.4)
     #First a S(Qx,Qy,Qz=0.5,E=1) slice. 
-    SQxQy_i = np.logical_and([np.abs(M_square[:,2]-0.0)<0.2],[np.abs(M_square[:,3]-1.0)<0.1]).flatten()
+    SQxQy_i = np.logical_and([np.abs(M_square[:,2]-0.0)<0.05],[np.abs(M_square[:,3]-1.0)<0.1]).flatten()
     colors = get_color(M_square[:,4],vmin=0,vmax=np.mean(M_square[:,4])*5,cmap='rainbow')
     ax[0].scatter(M_square[SQxQy_i][:,0],M_square[SQxQy_i][:,1],c=colors[SQxQy_i],marker='s',linewidths=0,s=3,rasterized=True)
     #Now a S(Qx,Qy=0,Qz=0.5,E) slice
-    SQxE_i = np.logical_and([np.abs(M_square[:,1]-0.5)<0.1],[np.abs(M_square[:,2]-0.0)<0.2]).flatten()
+    SQxE_i = np.logical_and([np.abs(M_square[:,1]-1)<0.1],[np.abs(M_square[:,2]-0.0)<0.1]).flatten()
 
     ax[1].scatter(M_square[SQxE_i][:,0],M_square[SQxE_i][:,3],c=colors[SQxE_i],marker='s',linewidths=0,s=3,rasterized=True,alpha=0.5)
     ax[0].set_xlabel('[H00] (r.l.u.)')

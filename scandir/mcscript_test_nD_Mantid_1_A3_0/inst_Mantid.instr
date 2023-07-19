@@ -1,0 +1,107 @@
+/********************************************************************************
+* 
+* McStas, neutron ray-tracing package
+*         Copyright (C) 1997-2008, All rights reserved
+*         Risoe National Laboratory, Roskilde, Denmark
+*         Institut Laue Langevin, Grenoble, France
+* 
+* This file was written by McStasScript, which is a 
+* python based McStas instrument generator written by 
+* Mads Bertelsen in 2019 while employed at the 
+* European Spallation Source Data Management and 
+* Software Centre
+* 
+* Instrument inst_Mantid
+* 
+* %Identification
+* Written by: Python McStas Instrument Generator
+* Date: 12:06:53 on July 18, 2023
+* Origin: ESS DMSC
+* %INSTRUMENT_SITE: Generated_instruments
+* 
+* 
+* %Parameters
+* 
+* %End 
+********************************************************************************/
+
+DEFINE INSTRUMENT inst_Mantid (
+A3 = 0, // Sample A3 Rotation angle.
+Ei = 10 // Incident neutron energy mean.
+)
+
+DECLARE 
+%{
+%}
+
+INITIALIZE 
+%{
+// Start of initialize for generated inst_Mantid
+%}
+
+TRACE 
+COMPONENT progress = Progress_bar()
+AT (0,0,0) ABSOLUTE
+
+COMPONENT sourceMantid = Source_gen(
+ radius = 0.0775, focus_xw = 0.01,
+ focus_yh = 0.01, E0 = Ei,
+ dE = 0.1, I1 = 1E+10,
+ verbose = 1)
+AT (0,0,0) ABSOLUTE
+ROTATED (0,0,0) ABSOLUTE
+
+COMPONENT sampleMantid = Arm()
+AT (0,0,2) RELATIVE sourceMantid
+ROTATED (0,A3,0) RELATIVE sourceMantid
+
+COMPONENT init = Union_init()
+AT (0,0,0) ABSOLUTE
+
+COMPONENT sample_sqw4 = Sqw4_process(
+ sqw = "spinw_CrI3.sqw4", recip_cell = 0,
+ barns = 1, ax = 6.283,
+ ay = 0, az = 0,
+ bx = 0, by = 0,
+ bz = 6.283, cx = 0,
+ cy = 6.283, cz = 0,
+ aa = 90, bb = 90,
+ cc = 90, interact_fraction = -1,
+ max_bad = 100000, max_stored_ki = 100000,
+ stored_dTheta = 1, stored_dkmag = 0.001)
+AT (0,0,0) ABSOLUTE
+ROTATED (0,0,0) ABSOLUTE
+
+COMPONENT sample_material = Union_make_material(
+ process_string = "sample_sqw4", my_absorption = 0)
+AT (0,0,0) ABSOLUTE
+
+COMPONENT sample_box = Union_box(
+ material_string = "sample_material", priority = 100,
+ xwidth = 0.01, yheight = 0.01,
+ zdepth = 0.01)
+AT (0,0,0) RELATIVE sampleMantid
+ROTATED (0,0,0) RELATIVE sampleMantid
+
+COMPONENT master = Union_master()
+AT (0,0,0) ABSOLUTE
+EXTEND %{
+// Remove direct beam
+if(!SCATTERED) ABSORB;
+%}
+
+COMPONENT stop = Union_stop()
+AT (0,0,0) ABSOLUTE
+
+COMPONENT nD_Mantid_1 = Monitor_nD(
+ yheight = 0.4, radius = 0.3,
+ options = "mantid banana, theta limits=[-90,90], bins=200, energy limits=[4.0,9.7], bins=60,				neutron pixel min=0 t, list all neutrons", filename = "banana_det_theta_E.dat")
+AT (0,0,0.0) RELATIVE sampleMantid
+ROTATED (0,0,0) ABSOLUTE
+
+FINALLY 
+%{
+// Start of finally for generated inst_Mantid
+%}
+
+END

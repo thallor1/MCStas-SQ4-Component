@@ -1,0 +1,48 @@
+McStas simulation description file for CrI3_inst.
+Date:    Wed Jul 19 10:38:28 2023
+Program: 
+
+begin instrument: CrI3_inst
+  File: CrI3_inst_20230719_103822/mccode
+  Source: CrI3_inst.instr
+  Parameters:  A3(double) Ei(double)
+  Trace_enabled: yes
+  Default_main: yes
+  Embedded_runtime: yes
+end instrument
+
+begin simulation: CrI3_inst_20230719_103822
+  Format: McCode with text headers
+  URL: http://www.mccode.org
+  Creator: 
+  Instrument: CrI3_inst.instr
+  Ncount: 100000
+  Trace: no
+  Gravitation: no
+  Seed: 1689777507583292
+  Directory: CrI3_inst_20230719_103822
+  Param: A3=0
+  Param: Ei=30
+end simulation
+
+begin data
+  Date: Wed Jul 19 10:38:30 2023 (1689777510)
+  type: array_2d(360, 120)
+  Source: CrI3_inst (CrI3_inst.instr)
+  component: monitor_N
+  position: 0 0 2
+  title:  Intensity Angle Energy Monitor (Banana) [out] per bin
+  Ncount: 200000
+  filename: banana_det_theta_E.dat
+  statistics: X0=-18.1713; dX=6.6237; Y0=23.9071; dY=1.29079;
+  signal: Min=0; Max=0.545562; Mean=0.000427673;
+  values: 18.4755 0.333633 11065
+  xvar: Lo
+  yvar: En
+  xlabel: Longitude [deg]
+  ylabel: Energy [meV]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -90 90 3 29.7
+  variables: I I_err N
+end data

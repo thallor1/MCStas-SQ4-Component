@@ -38,6 +38,7 @@ def sample_sqw4(sqw_f,p,qx,qy,qz,omega,nQx,nQy,nQz,nE,lat_a=None,lat_b=None,lat_
 	bstar_vec = 2.0*np.pi*np.cross(cvec,avec)/V_recip
 	cstar_vec = 2.0*np.pi*np.cross(avec,bvec)/V_recip
 
+
 	debug=False
 	#Begin by generating coarse grid of SQW 
 	Qy,Qx,Qz,E = np.meshgrid(qy,qx,qz,omega)
@@ -45,7 +46,8 @@ def sample_sqw4(sqw_f,p,qx,qy,qz,omega,nQx,nQy,nQz,nE,lat_a=None,lat_b=None,lat_
 	# Get a spectral weight function G(omega)
 	Gw_xy = np.trapz(SQW,x=qz,axis=2)
 	Gw_x = np.trapz(Gw_xy,x=qy,axis=1)
-	Gw = np.trapz(Gw_x,x=qx,axis=0)
+	Gw = np.sqrt(np.trapz(Gw_x,x=qx,axis=0)) #sqrt scale is used to help recover spectral weight in lower
+	# intensity regions. 
 
 	#Now we want the integral of Gw. 
 	gw_int = []
@@ -69,10 +71,16 @@ def sample_sqw4(sqw_f,p,qx,qy,qz,omega,nQx,nQy,nQz,nE,lat_a=None,lat_b=None,lat_
 		cross_omegas = np.linspace(np.min(omegas),np.max(omegas),nE)
 	else:
 		cross_omegas = test_omegas[cross_i]
-	if force_omega==True:
-		final_omegas=omega
+	final_omegas = cross_omegas # Just an easier name to remember. 
+	if force_omegas is False:
+		pass
 	else:
-		final_omegas = cross_omegas # Just an easier name to remember. 
+		final_omegas = force_omegas #Allows user to manually specify the sampled energy points. 
+		if len(force_omegas)!=nE:
+			print("WARNING: The number of requested points in energy and the \n\
+				force_omegas list do not have the same length. Defaulting to the length\n\
+				the force_omegas list.")
+			nE = len(force_omegas)
 	# Optional plot of extracted DOS. 
 	if debug==True:
 		fig,ax = plt.subplots(1,1)
@@ -90,7 +98,7 @@ def sample_sqw4(sqw_f,p,qx,qy,qz,omega,nQx,nQy,nQz,nE,lat_a=None,lat_b=None,lat_
 	nPts_per_w = nQx*nQy*nQz
 	totalRows = nQx*nQy*nQz*len(cross_omegas)
 	#Preallocate our output array:
-	outmat = np.empty((totalRows,5))#H,K,L,W,SQW
+	outmat = np.empty((totalRows,6))#H,K,L,W,SQW*dSQW, SQW
 	matindex = 0
 	i=0
 	for i in tqdm(range(len(cross_omegas)), desc=f"Energies: ",leave=True):
@@ -99,7 +107,7 @@ def sample_sqw4(sqw_f,p,qx,qy,qz,omega,nQx,nQy,nQz,nE,lat_a=None,lat_b=None,lat_
 		SQxyz = sqw_f(Qx_pt,Qy_pt,Qz_pt,w_pt,*p)
 		#Determine the correct density of points along the L-axis using the same spectral weight method.
 		SQyz = np.trapz(SQxyz,x=qx,axis=0)
-		SQz = np.trapz(SQyz,x=qy,axis=0)
+		SQz = np.sqrt(np.trapz(SQyz,x=qy,axis=0))
 		norm = np.trapz(SQz,x=qz)
 		SQz/=norm
 		sqz_int = np.array(SQz)/norm
@@ -132,7 +140,7 @@ def sample_sqw4(sqw_f,p,qx,qy,qz,omega,nQx,nQy,nQz,nE,lat_a=None,lat_b=None,lat_
 				ax3.set_xlabel('Qx')
 				ax3.set_ylabel('Qy')
 				fig3.show()
-			SQy = np.trapz(SQxQy,x=qx_fine,axis=0)
+			SQy = np.sqrt(np.trapz(SQxQy,x=qx_fine,axis=0))
 			dqy = np.abs(qy_fine[1]-qy_fine[0])
 			SQy_int = np.cumsum(SQy*dqy/np.trapz(SQy,x=qy_fine))
 
@@ -148,12 +156,12 @@ def sample_sqw4(sqw_f,p,qx,qy,qz,omega,nQx,nQy,nQz,nE,lat_a=None,lat_b=None,lat_
 			#Now, we know which Qy values we will evaluate. Finally, iterate through these and get our final points. 
 			for k in range(len(cross_qy)):
 				qy_pt = cross_qy[k]
-				SQx = SQxQy[:,cross_i[k]]
+				SQx = np.sqrt(SQxQy[:,cross_i[k]])
 				SQx[np.isnan(SQx)]=0
 				qx_pts = np.random.choice(qx_fine,size=(nQx),replace=False,p=SQx/np.nansum(SQx))
 				#Get the SQW values at this H,K,L,E
 				pts_i = np.argmin(np.abs(qx_fine-qx_pts[:,np.newaxis]),axis=1)
-				SQx_picked = SQx[pts_i]#*norm undo probability distribution nature of it. 
+				SQx_picked = SQx[pts_i]*norm #undo probability distribution nature of it. 
 				outmat[matindex:matindex+len(SQx_picked),0]=qx_pts 
 				# If desired, can add additional noise to each axis here.
 				if ynoise is False:
@@ -174,7 +182,7 @@ def sample_sqw4(sqw_f,p,qx,qy,qz,omega,nQx,nQy,nQz,nE,lat_a=None,lat_b=None,lat_
 					#Return a random array of Qy points in this range, centered around original val.
 					origQy = qy_pt 
 					qy_range = np.abs(highQy-lowQy)
-					stddev = qy_range/5
+					stddev = qy_range/5.0
 					newQypts = np.random.normal(qy_pt,stddev,len(qx_pts))
 					#ensure that no points exceed the boundaries. 
 					newQypts[newQypts>highQy]=highQy 
@@ -230,8 +238,39 @@ def sample_sqw4(sqw_f,p,qx,qy,qz,omega,nQx,nQy,nQz,nE,lat_a=None,lat_b=None,lat_
 					#The actual values of SQW have been accounted for in spectral weight. 
 					sqw_new = sqw_f(qx_new_arr,qy_new_arr,qz_new_arr,w_new_arr,*p)
 					#Get a normalized probability of this point:
-
-					outmat[matindex:matindex+len(SQx_picked),4]=sqw_new
+					# These need to be normalized by the volume element, which is 
+					# estimated by the spacing between sampling points. 
+					Qx_wids = np.diff(qx_pts)
+					dQx = np.array([Qx_wids[ind]+Qx_wids[ind+1] for ind in range(len(Qx_wids)-1)]) #Define the volume element as the midpoints between bins
+					# Handle the end points as well. Append them to the first and final values of the dQx list
+					dQx_0,dQx_last = Qx_wids[0],Qx_wids[-1]
+					dQx = np.insert(dQx,[0,-1],[dQx_0,dQx_last])
+					dQx = np.abs(dQx)
+					if k==0:
+						dQy = np.abs(cross_qy[k]+cross_qy[k+1])
+					elif k==len(cross_qy)-1:
+						dQy = np.abs(cross_qy[k-1]+cross_qy[k])
+					else:
+						dQy = np.abs(cross_qy[k-1]+cross_qy[k])/2.0 +\
+								np.abs(cross_qy[k]+cross_qy[k+1])/2.0
+					if j==0:
+						dQz = np.abs(cross_qz[j]+cross_qz[j+1])
+					elif j==len(cross_qz)-1:
+						dQz = np.abs(cross_qz[j-1]+cross_qz[j])
+					else:
+						dQz = np.abs(cross_qz[j-1]+cross_qz[j])/2.0+\
+							np.abs(cross_qz[j]+cross_qz[j+1])/2.0
+					if i==0:
+						dE = np.abs(cross_omegas[i]+cross_omegas[i+1])
+					elif i==len(cross_omegas)-1:
+						dE = np.abs(cross_omegas[i-1]+cross_omegas[i])
+					else:
+						dE = np.abs(cross_omegas[i-1]+cross_omegas[i])/2.0+\
+								np.abs(cross_omegas[i]+cross_omegas[i+1])/2.0
+					#Now calculate volume elements, factor of 1e-3 is for conversion to eV vs meV
+					dSQW = dQx*dQz*dE*1e-3
+					outmat[matindex:matindex+len(SQx_picked),4]=sqw_new*dSQW
+					outmat[matindex:matindex+len(SQx_picked),5]=sqw_new
 				matindex+=len(qx_pts)
 	#List of S(q,w) points should be ordered by |Q|+(2m/hbar^2)*E/|Q|,
 	#and then by |Q| where these are degenerate
@@ -268,6 +307,13 @@ def sample_sqw4(sqw_f,p,qx,qy,qz,omega,nQx,nQy,nQz,nE,lat_a=None,lat_b=None,lat_
 		sorti = np.argsort(chi_vec)
 		outmat=outmat[sorti]
 	print("Sorted.")
+	#optionally, remove points below some intensity threshold, say 1e-5 of max intensity.
+	I_threshold = 1e-3
+	print(f"Before removing {I_threshold:.3e}*max_I, {len(outmat):.3e} points.")
+	min_I = np.nanmax(outmat[:,5])*I_threshold
+	good_I = np.where(outmat[:,5]>=min_I)[0]
+	outmat=outmat[good_I]
+	print(f"After filtering, {len(outmat):.3e} points remain.")
 	#Finally, save the file. 
 	#Need a header for sample information 
 	header = f"	lattice_a {lat_a:.3f}\n\
@@ -287,7 +333,7 @@ def sample_sqw4(sqw_f,p,qx,qy,qz,omega,nQx,nQy,nQz,nE,lat_a=None,lat_b=None,lat_
 	column_S 5\n\
 	h k l En S(q,w)\n"
 	print("Saving.")
-	np.savetxt(fname,outmat,fmt='%.5f %.5f %.5f %.5f %.5e',header=header)
+	np.savetxt(fname,outmat,fmt='%.5f %.5f %.5f %.5f %.5e %5e',header=header)
 	print(f"File {fname} saved successfully.")
 	return outmat
 

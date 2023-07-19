@@ -59,9 +59,10 @@ SETTING PARAMETERS(string sqw=0,
             ax = 0, ay = 0, az = 0,
             bx = 0, by = 0, bz = 0,
             cx = 0, cy = 0, cz = 0,
-	          aa=0, bb=0, cc=0, 
+            aa=0, bb=0, cc=0, 
             interact_fraction=-1, packing_factor=1, 
-            max_bad=1e5, max_stored_ki=1e5, string init="init")
+            max_bad=1e5, max_stored_ki=1e5, string init="init",
+            stored_dTheta=1, stored_dkmag=2e-3)
 OUTPUT PARAMETERS (This_process,Sqw4_physics_storage_struct,effective_my_scattering)
 
 SHARE
@@ -141,7 +142,8 @@ SHARE
       struct hklw_store *stored;   /* Stored list of allowed hkl for particular ki vector */
       int    nb_reuses, nb_refl, nb_refl_count;
       int picked_ref;             /* Index of last particular reflection */
-      int num_bad_end, num_stored_end, num_searched_end /* Keeps track of how often optimizations are used */
+      int num_bad_end, num_stored_end, num_searched_end; /* Keeps track of how often optimizations are used */
+      double dTheta, dKmag; /* parameters used to consider stored K-values a "Match", in degrees and ang^-1 respectively */
     };
 
   
@@ -275,7 +277,7 @@ SHARE
       else bs = sqrt(info->m_bx*info->m_bx+info->m_by*info->m_by+info->m_bz*info->m_bz);
       if (info->m_c) cs = info->m_c;
       else cs =  sqrt(info->m_cx*info->m_cx+info->m_cy*info->m_cy+info->m_cz*info->m_cz);
-
+      /*
       info->m_bz = as; info->m_by = 0; info->m_bx = 0;
       info->m_az = bs*cos(info->m_cc*DEG2RAD);
       info->m_ay = bs*sin(info->m_cc*DEG2RAD);
@@ -284,27 +286,29 @@ SHARE
       info->m_cy = cs*(cos(info->m_aa*DEG2RAD)-cos(info->m_cc*DEG2RAD)*cos(info->m_bb*DEG2RAD))
                      /sin(info->m_cc*DEG2RAD);
       info->m_cx = sqrt(cs*cs - info->m_cz*info->m_cz - info->m_cy*info->m_cy);
-
+      */ 
       printf("SQW4: %s structure a=%g b=%g c=%g aa=%g bb=%g cc=%g \n",
         (flag ? "INC" : SC_file), as, bs, cs, info->m_aa, info->m_bb, info->m_cc);
     } else {
       if (!info->recip) {
         printf("SQW4: %s structure a=[%g,%g,%g] b=[%g,%g,%g] c=[%g,%g,%g] \n",
-	       (flag ? "INC" : SC_file), info->m_ax ,info->m_ay ,info->m_az,
-	       info->m_bx ,info->m_by ,info->m_bz,
-	       info->m_cx ,info->m_cy ,info->m_cz);
+         (flag ? "INC" : SC_file), info->m_ax ,info->m_ay ,info->m_az,
+         info->m_bx ,info->m_by ,info->m_bz,
+         info->m_cx ,info->m_cy ,info->m_cz);
       } else {
         printf("SQW4: %s structure a*=[%g,%g,%g] b*=[%g,%g,%g] c*=[%g,%g,%g] \n",
-	       (flag ? "INC" : SC_file), info->m_ax ,info->m_ay ,info->m_az,
-	       info->m_bx ,info->m_by ,info->m_bz,
-	       info->m_cx ,info->m_cy ,info->m_cz);
+         (flag ? "INC" : SC_file), info->m_ax ,info->m_ay ,info->m_az,
+         info->m_bx ,info->m_by ,info->m_bz,
+         info->m_cx ,info->m_cy ,info->m_cz);
       }
     }
+    /* Strange definition of coordinates above, switch x and y around below */
+
     /* Compute reciprocal or direct lattice vectors. */
     if (!info->recip) {
       vec_prod(tmp_x, tmp_y, tmp_z,
-	       info->m_bx, info->m_by, info->m_bz,
-	       info->m_cx, info->m_cy, info->m_cz);
+         info->m_bx, info->m_by, info->m_bz,
+         info->m_cx, info->m_cy, info->m_cz);
       info->V0 = fabs(scalar_prod(info->m_ax, info->m_ay, info->m_az, tmp_x, tmp_y, tmp_z));
       printf("V0=%g\n", info->V0);
       printf("SQW4: a=[%g,%g,%g]\n",info->m_ax,info->m_ay,info->m_az);
@@ -313,17 +317,17 @@ SHARE
       //info->asx = 2*PI/info->V0*tmp_x;
       //info->asy = 2*PI/info->V0*tmp_y;
       //info->asz = 2*PI/info->V0*tmp_z;
-      info->asy = 2*PI/info->V0*tmp_x;
-      info->asx = 2*PI/info->V0*tmp_y;
-      info->asz = 2*PI/info->V0*tmp_z;
+      info->asx = -2*PI/info->V0*tmp_x;
+      info->asy = 2*PI/info->V0*tmp_y;
+      info->asz = -2*PI/info->V0*tmp_z;
       printf("SQW4: a*=[%g,%g,%g]\n",info->asx, info->asy, info->asz);
       vec_prod(tmp_x, tmp_y, tmp_z, info->m_cx, info->m_cy, info->m_cz, info->m_ax, info->m_ay, info->m_az);
-      info->bsx = 2*PI/info->V0*tmp_x;
+      info->bsx = -2*PI/info->V0*tmp_x;
       info->bsy = 2*PI/info->V0*tmp_y;
-      info->bsz = 2*PI/info->V0*tmp_z;
+      info->bsz = -2*PI/info->V0*tmp_z;
       vec_prod(tmp_x, tmp_y, tmp_z, info->m_ax, info->m_ay, info->m_az, info->m_bx, info->m_by, info->m_bz);
-      info->csy = 2*PI/info->V0*tmp_x;
-      info->csx = 2*PI/info->V0*tmp_y;
+      info->csx = 2*PI/info->V0*tmp_x;
+      info->csy = -2*PI/info->V0*tmp_y;
       info->csz = 2*PI/info->V0*tmp_z;
       printf("SQW4: %s structure a*=[%g,%g,%g] b*=[%g,%g,%g] c*=[%g,%g,%g] \n",
          (flag ? "INC" : SC_file), info->asx ,info->asy ,info->asz,
@@ -341,8 +345,8 @@ SHARE
       info->csz = info->m_cz;
       
       vec_prod(tmp_x, tmp_y, tmp_z,
-	       info->bsx/(2*PI), info->bsy/(2*PI), info->bsz/(2*PI),
-	       info->csx/(2*PI), info->csy/(2*PI), info->csz/(2*PI));
+         info->bsx/(2*PI), info->bsy/(2*PI), info->bsz/(2*PI),
+         info->csx/(2*PI), info->csy/(2*PI), info->csz/(2*PI));
       info->V0 = 1/fabs(scalar_prod(info->asx/(2*PI), info->asy/(2*PI), info->asz/(2*PI), tmp_x, tmp_y, tmp_z));
       printf("V0=%g\n", info->V0);
       
@@ -454,11 +458,12 @@ SHARE
     int last_stored = info->last_stored;
     int nhklw=0; // Number of points that satisfy all scattering requirements.
     int kin_flag=0, fail_flag=0; // Flag to stop the search of the overall list
-    double cpu_time, init_time, final_time; // for debugging 
+    double cpu_time, cpu_time2,init_time, final_time; // for debugging 
 
     int print_times=0;
 
-    clock_t start_T, end_T;
+    clock_t start_T,start_T2, end_T;
+
     if (print_times==1){
       start_T = clock();
     }
@@ -481,11 +486,11 @@ SHARE
       kmag = sqrt(info->badx[i1]*info->badx[i1] + info->bady[i1]*info->bady[i1] + info->badz[i1]*info->badz[i1]);
       kdir = ((kix*info->badx[i1])+ (kiy*info->bady[i1])+  (kiz*info->badz[i1]))/kmag/kimod;
       kdir = acos(kdir)*(1.0/DEG2RAD); // Now this is the angle between the two k-vectors in deg
-      if((fabs(kdir))<0.5 && fabs(kmag-kimod)<5e-3) 
+      if((fabs(kdir))<info->dTheta && fabs(kmag-kimod)<info->dKmag) 
         {
           info->num_bad_end++;
           foundflag=1;
-          printf("Found bad point \n");
+          //printf("Found bad point \n");
           if(print_times==1){
             end_T = clock();
             cpu_time = ((double) (end_T-start_T))/CLOCKS_PER_SEC;
@@ -499,10 +504,13 @@ SHARE
       end_T=clock();
       cpu_time = ((double) (end_T-start_T))/CLOCKS_PER_SEC;
 
-      printf("To search entire bad list requires cpu_time=%6e s\n",cpu_time);
+      //printf("To search entire bad list requires cpu_time=%6e s\n",cpu_time);
     }
     
     // Check previously generated list of ki's which can scatter, and see if this ki matches, saving us to go through the S(q,w) list again.
+    if(print_times==1){
+      start_T=clock();
+    }
     for(i1=0; i1<info->last_stored; i1++) 
         {
           if(info->stored[i1].nhklw>0) 
@@ -511,7 +519,8 @@ SHARE
               kmag = sqrt(info->stored[i1].kx*info->stored[i1].kx + info->stored[i1].ky*info->stored[i1].ky + info->stored[i1].kz*info->stored[i1].kz);
               kdir = ((kix*info->stored[i1].kx) + (kiy*info->stored[i1].ky) + (kiz*info->stored[i1].kz))/kmag/kimod;
               kdir = acos(fabs(kdir))*(1.0/DEG2RAD);
-              if((fabs(kdir))<0.5 && fabs(kmag-kimod)<5e-3) 
+              //printf("kdir condition: %d, kmag condition: %d\n",fabs(kdir)<0.5,fabs(kmag-kimod)<2e-3);
+              if((fabs(kdir))<info->dTheta && fabs(kmag-kimod)<info->dKmag) 
                 {
                   int j_mapped;
                   j_mapped = rand0max(info->stored[i1].nhklw);
@@ -585,7 +594,9 @@ SHARE
 
     if(nhklw>0 && fail_flag==0)
       {
-        
+        if(print_times==1){
+          start_T2=clock();
+        }        
         // Select a random index between 0 and maxi
         // This value is unacceptable by energy conservation. Mark it as the final point.
         maxi = nhklw-1;
@@ -620,10 +631,11 @@ SHARE
         i3=0;
         i3=0;
         info->last_stored++;
-        if(info->last_stored>=info->stored_ki_max){
+        if(info->last_stored>=info->stored_ki_max || print_times==1){
           printf("Stored %d points. \n",info->last_stored);
-
-          info->last_stored=0; // overwrite old values.
+          if(info->last_stored>=info->stored_ki_max){
+            info->last_stored=0;
+          } // overwrite old values.
         }
         // This saves us from iterating through the sqw list again if a similar ki is encountered. 
         free(tmp_list);
@@ -634,10 +646,12 @@ SHARE
         {
           end_T = clock();
           cpu_time = ((double) (end_T-start_T))/CLOCKS_PER_SEC;
+          cpu_time2 = ((double)(end_T-start_T2))/CLOCKS_PER_SEC;
           printf("For full search cpu_time=%6e s\n",cpu_time);
         }
 
         //printf("Returning on j=%d\n",j);
+
         return j;
       }
     //free(tmp_list);
@@ -711,16 +725,17 @@ int Sqw4_physics_my(double *my, double *k_initial, union data_transfer_union dat
         double coh_xsect = 0, coh_refl = 0;
         
         /* call hklw_search */
-        choice_i = hklw_select_union(hklw_info->list, hklw_info, hklw_info->count, kix, kiy, kiz); /* CPU consuming */
+        //choice_i = hklw_select_union(hklw_info->list, hklw_info, hklw_info->count, kix, kiy, kiz); /* CPU consuming */
         //printf("hklw_search returned j=%d\n",choice_i);
         //choice_i = hklw_info->picked_ref;
-        S=hklw_info->list[choice_i].SQW;
+        //S=hklw_info->list[choice_i].SQW;
+        S=100; // This is clearly not right, needs to be fixed. 
         //printf("S=%4f\n",S);
-        if (choice_i==0)
-        {
+        //if (choice_i==0)
+        //{
           //Should absorb, no possible scattering process. 
-          S=0;
-        }
+        //  S=0;
+        //}
         coh_xsect = S;
         coh_refl = S;
         //printf("coh_xsect=%d\n",coh_xsect);
@@ -886,6 +901,8 @@ INITIALIZE
   hklw_info_union.num_bad_end=0;
   hklw_info_union.num_stored_end=0;
   hklw_info_union.num_searched_end=0;
+  hklw_info_union.dTheta = stored_dTheta;
+  hklw_info_union.dKmag = stored_dkmag;
   //int num_bad_end, num_stored_end, num_searched_end /* Keeps track of how often optimizations are used */
 
 

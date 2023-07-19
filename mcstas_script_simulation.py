@@ -97,8 +97,10 @@ sample_sqw4.aa=90
 sample_sqw4.bb=90
 sample_sqw4.cc=90
 sample_sqw4.barns=1
-#sample_sqw4.max_stored_ki=1e4
-#sample_sqw4.max_bad=1e4
+sample_sqw4.max_stored_ki=1e5
+sample_sqw4.max_bad=1e5
+sample_sqw4.stored_dTheta = 1
+sample_sqw4.stored_dkmag = 1e-3
 sample_sqw4.recip_cell=0
 sample_sqw4.interact_fraction=-1
 #sample_sqw4.init="'init'"
@@ -145,15 +147,15 @@ monitornd.radius=0.3
 monitornd.yheight=0.4
 numthetabins = 200
 numomegabins = 60
-optionsstr = "banana, theta limits=[-90,90], bins="+f"{numthetabins}"+ f", energy limits=[5.0,9.5], bins={numomegabins}"
+optionsstr = "banana, theta limits=[-90,90], bins="+f"{numthetabins}"+ f", energy limits=[4.0,9.7], bins={numomegabins}"
 monitornd.options='\"'+optionsstr+'\"'
 monitornd.filename='"banana_det_theta_E.dat"'
 monitornd.set_AT([0,0,0.00],RELATIVE="crystal_assembly")
-monitornd.set_ROTATED([0,0,0],RELATIVE="crystal_assembly")
+monitornd.set_ROTATED([0,0,0])
 
 
-numA3=600
-A3_list = np.linspace(-120,120,numA3)
+numA3=300
+A3_list = np.linspace(-90,90,numA3)
 #A3_list=np.array([ ])
 #Preallocate output array, cols are H,K,E,I,Err,N
 npts = numA3*numthetabins*numomegabins
@@ -163,7 +165,7 @@ matind = 0
 n_threads = 8
 Ei_test=10.0
 #Start by compiling the instrument, then vary the params. 
-inel_test_inst.settings(ncount=100,force_compile=True,output_path=f"scandir/mcscript_test_monitorND_A3=0",
+inel_test_inst.settings(ncount=100,force_compile=True,output_path=f"scandir/mcscript_test_monitorND_A3_0",
     checks=False)
 inel_test_inst.set_parameters(A3=0,Ei=10.0)
 
@@ -171,7 +173,7 @@ dat_a3 = inel_test_inst.backengine()
 #Initialize the output matrix. 
 output_I_shape = np.shape(dat_a3[0].Intensity) # Will be of dimension energy x theta bins
 #W will only keep one energy, so output matrix will be of numA3xthetabins
-#Matrix columns will be Qx, Qy, I, Err, N
+#Matrix columns will be Qx, Qy, I, Err
 outmat = np.zeros((numA3*numthetabins,4))
 
 #Second plot of (h00) vs E
@@ -189,7 +191,7 @@ for root, dirs, files in os.walk('scandir/'):
 def run_scan(instrument, A3):
     print(f"Running A3={A3:.3f}")
     inst_copy = instrument# copy.deepcopy(instrument)
-    inst_copy.settings(ncount=1e6,force_compile=False,output_path=f"scandir/mcscript_test_monitorND_A3{A3:.3f}deg".replace('.','p').replace('-','m'),
+    inst_copy.settings(ncount=1e5,force_compile=False,output_path=f"scandir/mcscript_test_monitorND_A3_{A3:.3f}deg".replace('.','p').replace('-','m'),
         checks=False)
     inst_copy.set_parameters(A3=A3,Ei=10.0)
     dat = inst_copy.backengine()
@@ -197,17 +199,21 @@ def run_scan(instrument, A3):
 
 datlist = Parallel(n_jobs = n_threads, backend="threading")(delayed(run_scan)(inel_test_inst,A3) for A3 in A3_list)
 
+# also need a way to load files if we don't want to redo all of this. 
+
+
 h_pts=[]
 omega_pts = []
 i_pts = []
 for ii,dat in enumerate(datlist):
     if ii==0:
         matind=0
-    print(ii)
+    print(f"ii={ii}, A3={A3_list[ii]:.3f} deg")
     A3_test = A3_list[ii]
     dat_a3 = datlist[ii]
     if len(dat_a3)==0:
         #Some error occurred during the scan. 
+        print("Error.")
         continue 
     DEG2RAD = np.pi/180.0
     #Project crystal axes to Q. 
@@ -271,7 +277,7 @@ for ii,dat in enumerate(datlist):
     outmat[matind:matind+len(Qu_slice.flatten()),:]=np.array([Qu_slice.flatten(),Qv_slice.flatten(),I_slice,Err_A3]).T
 
     #For second slice, append all values to the output list where |Qv|<0.1
-    qv_i =np.where(np.abs(Qv.flatten()-0.0)<0.2)[0]
+    qv_i =np.where(np.abs(Qv.flatten()-0.0)<0.04)[0]
     Qu_list = Qu.flatten()[qv_i].tolist()
     E_list = Omega.flatten()[qv_i].tolist()
     I_list = Intensities.flatten()[qv_i].tolist()
@@ -285,30 +291,40 @@ print("Success.")
 #Bin
 
 #Bin the space in 2D.
-fig,ax = plt.subplots(2,1)
-qx_binedges = np.linspace(-1,1,101)
-qy_binedges = np.linspace(-1,1,101)
+fig,ax = plt.subplots(1,2,figsize=(8,3))
+qx_binedges = np.linspace(-2,2,131)
+qy_binedges = np.linspace(-2,2,131)
 Qx,Qy = np.meshgrid(qx_binedges,qy_binedges)
 I_slice = np.zeros(np.shape(Qx))
 
 binned_statistic = scipy.stats.binned_statistic_2d(outmat[:,0], outmat[:,1], outmat[:,2], statistic='mean', bins=(qx_binedges,qy_binedges), 
     range=None, expand_binnumbers=False)
 Z = binned_statistic.statistic
-ax[0].pcolormesh(Qx,Qy,Z.T,norm=colors.LogNorm(vmin=np.nanmean(Z)/10,vmax=np.nanmax(Z)),cmap='rainbow',rasterized=True)
-#ax[0].pcolormesh(Qx,Qy,Z.T,vmin=0,vmax=np.nanmax(Z)/2.0,cmap='rainbow',rasterized=True)
+#ax[0].pcolormesh(Qx,Qy,Z.T,norm=colors.LogNorm(vmin=np.nanmean(Z)/10,vmax=np.nanmax(Z)),cmap='rainbow',rasterized=True)
+ax[0].pcolormesh(Qx,Qy,Z.T,vmin=0,vmax=np.nanmax(Z)/1.5,cmap='rainbow',rasterized=True)
 
 #Now the (h00) vs E slice
 h_arr = np.array(h_pts).flatten()
 omega_arr= np.array(omega_pts).flatten()
 I_arr = np.array(i_pts).flatten()
 en_binedges = np.linspace(0.2,6,60)
-h_binedges = np.linspace(-1,1,101)
+h_binedges = np.linspace(-2,2,131)
 Qh, Ebins = np.meshgrid(h_binedges,en_binedges)
 binned_h00_statistic = scipy.stats.binned_statistic_2d(h_arr,omega_arr,I_arr,statistic='mean',bins=(h_binedges,en_binedges))
 Z_h00 = binned_h00_statistic.statistic
-ax[1].pcolormesh(Qh,Ebins,Z_h00.T,norm=colors.LogNorm(vmin=np.nanmean(Z_h00)/10,vmax=np.nanmax(Z_h00)),cmap='rainbow',rasterized=True)
-#ax[1].pcolormesh(Qh,Ebins,Z_h00.T,vmin=0,vmax=np.nanmax(Z_h00),cmap='rainbow',rasterized=True)
-
+#ax[1].pcolormesh(Qh,Ebins,Z_h00.T,norm=colors.LogNorm(vmin=np.nanmean(Z_h00)/10,vmax=np.nanmax(Z_h00)),cmap='rainbow',rasterized=True)
+ax[1].pcolormesh(Qh,Ebins,Z_h00.T,vmin=0,vmax=np.nanmax(Z_h00)/1.5,cmap='rainbow',rasterized=True)
+ax[0].set_xlabel('[H00] (r.l.u.)')
+ax[0].set_ylabel('[0K0] (r.l.u.)')
+ax[1].set_xlabel('[H00] (r.l.u.)')
+ax[0].set_title(r'Spin-waves, $\hbar\omega$=[2.0,2.2] (meV), $l$=[-0.2,0.2]')
+ax[0].set_title(r"$\hbar\omega$=[2.0,2.2] meV")
+ax[1].set_title(r"$k$=[-0.1,0.1], $l$=[-0.2,0.2]")
+ax[1].set_ylabel(r'$\hbar\omega$ (meV)')
+ax[0].set_xlim(-2,2)
+ax[0].set_ylim(-2,2)
+ax[1].set_xlim(-2,2)
+ax[1].set_ylim(0,6)
 fig.savefig('test_inel_spinwave_slices.pdf',bbox_inches='tight',dpi=300)
 fig.show()
 
