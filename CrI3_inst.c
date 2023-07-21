@@ -2,7 +2,7 @@
  * Format:     ANSI C source code
  * Creator:    McStas <http://www.mcstas.org>
  * Instrument: CrI3_inst.instr (CrI3_inst)
- * Date:       Wed Jul 19 12:08:10 2023
+ * Date:       Thu Jul 20 16:04:47 2023
  * File:       ./CrI3_inst.c
  * CFLAGS= -I@MCCODE_LIB@/share/ -DFUNNEL 
  */
@@ -40948,8 +40948,8 @@ int _sample_sqw4_setpos(void)
   stracpy(_sample_sqw4_var._name, "sample_sqw4", 16384);
   stracpy(_sample_sqw4_var._type, "Sqw4_process", 16384);
   _sample_sqw4_var._index=5;
-  if("spinw_CrI3.sqw4" && strlen("spinw_CrI3.sqw4"))
-    stracpy(_sample_sqw4_var._parameters.sqw, "spinw_CrI3.sqw4" ? "spinw_CrI3.sqw4" : "", 16384);
+  if("spinw_CrI3_full.sqw4" && strlen("spinw_CrI3_full.sqw4"))
+    stracpy(_sample_sqw4_var._parameters.sqw, "spinw_CrI3_full.sqw4" ? "spinw_CrI3_full.sqw4" : "", 16384);
   else 
   _sample_sqw4_var._parameters.sqw[0]='\0';
   _sample_sqw4_var._parameters.recip_cell = 0;
@@ -41303,7 +41303,7 @@ int _sqqw_monitor_setpos(void)
   _sqqw_monitor_var._parameters.qbmin = -3;
   _sqqw_monitor_var._parameters.qbmax = 3;
   _sqqw_monitor_var._parameters.Emin = 0;
-  _sqqw_monitor_var._parameters.Emax = 25;
+  _sqqw_monitor_var._parameters.Emax = 20;
   _sqqw_monitor_var._parameters.nqa = 101;
   _sqqw_monitor_var._parameters.nqb = 101;
   _sqqw_monitor_var._parameters.nE = 60;

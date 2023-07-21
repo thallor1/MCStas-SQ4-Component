@@ -66,7 +66,7 @@ init = CrI3_inst.add_component("init","Union_init")
 
 #Sample sqw4 processs
 sample_sqw4 = CrI3_inst.add_component("sample_sqw4", "Sqw4_process")
-sample_sqw4.sqw = '"spinw_CrI3.sqw4"'
+sample_sqw4.sqw = '"spinw_CrI3_full.sqw4"'
 #We are choosing to have the (100) vector along the x-axis
 sample_sqw4.ax=6.867*np.sqrt(3)/2.0
 sample_sqw4.ay=0

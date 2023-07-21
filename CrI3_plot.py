@@ -136,7 +136,6 @@ qz_eslicebins = np.linspace(-2.5,2.5,71)
 
 eslice_bin = scipy.stats.binned_statistic_dd(sample=[Qz.flatten(),Qx.flatten(),E.flatten()],values=outmat.T.flatten(),statistic=np.nanmean,bins=[qz_eslicebins,qx_eslicebins,[5.5,6.5]])
 Qx_Eslice, Qz_Eslice = np.meshgrid(qx_eslicebins,qz_eslicebins)
-E_i = np.argmin(np.abs(e_list-E_test))	
 
 qxbins = np.linspace(-2.5,2.5,100)
 Eh00bins = np.linspace(0,25,40)
@@ -145,15 +144,16 @@ Eh00bins = np.linspace(0,25,40)
 h00bin = scipy.stats.binned_statistic_dd(sample=[Qz.flatten(),Qx.flatten(),E.flatten()],values=outmat.T.flatten(),statistic=np.nanmean,bins=[[-0.2,0.2],qxbins,Eh00bins])
 Qx_h00, E_h00 = np.meshgrid(qxbins,Eh00bins)
 fig,ax = plt.subplots(1,2,figsize=(9,4))
-vmax=5
-ax[0].pcolormesh(Qx_Eslice,Qz_Eslice,eslice_bin.statistic[:,:,0],cmap='viridis',vmin=0,vmax=vmax)
-mesh = ax[1].pcolormesh(Qx_h00,E_h00,h00bin.statistic[0,:,:].T,cmap='viridis',vmin=0,vmax=vmax)
+vmax=2
+ax[0].pcolormesh(Qx_Eslice,Qz_Eslice,eslice_bin.statistic[:,:,0],cmap='Spectral_r',vmin=0,vmax=vmax,rasterized=True)
+mesh = ax[1].pcolormesh(Qx_h00,E_h00,h00bin.statistic[0,:,:].T,cmap='Spectral_r',vmin=0,vmax=vmax,rasterized=True)
 ax[0].set_xlabel(r'$Q_x$ ($\AA^{-1}$)')
 ax[0].set_ylabel(r'$Q_z$ ($\AA^{-1}$)')
 ax[0].set_title(r"$\hbar\omega$=6.0(5) meV slice")
 ax[1].set_ylabel(r"$\hbar\omega$ (meV)")
 ax[1].set_xlabel(r"$(h00)$ (r.l.u.)")
 ax[1].set_title("CrI$_3$ SPINW Simulation, $k$=0")
+fig.savefig('CrI3_spinw_mcstas_result.pdf',bbox_inches='tight',dpi=300)
 fig.show()
 
 

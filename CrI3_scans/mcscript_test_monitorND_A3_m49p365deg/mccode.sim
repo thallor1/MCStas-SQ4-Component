@@ -1,9 +1,9 @@
 McStas simulation description file for CrI3_inst.
-Date:    Wed Jul 19 12:08:40 2023
+Date:    Thu Jul 20 16:09:43 2023
 Program: 
 
 begin instrument: CrI3_inst
-  File: /home/tjh/Github-Repos/MCStas-SQ4-Component/CrI3_scans/mcscript_test_monitorND_A3_m49p365deg/mccode
+  File: /mnt/c/Users/tjh/Documents/GitHub/MCStas-SQ4-Component/CrI3_scans/mcscript_test_monitorND_A3_m49p365deg/mccode
   Source: CrI3_inst.instr
   Parameters:  A3(double) Ei(double)
   Trace_enabled: yes
@@ -11,7 +11,7 @@ begin instrument: CrI3_inst
   Embedded_runtime: yes
 end instrument
 
-begin simulation: /home/tjh/Github-Repos/MCStas-SQ4-Component/CrI3_scans/mcscript_test_monitorND_A3_m49p365deg
+begin simulation: /mnt/c/Users/tjh/Documents/GitHub/MCStas-SQ4-Component/CrI3_scans/mcscript_test_monitorND_A3_m49p365deg
   Format: McCode with text headers
   URL: http://www.mccode.org
   Creator: 
@@ -19,14 +19,14 @@ begin simulation: /home/tjh/Github-Repos/MCStas-SQ4-Component/CrI3_scans/mcscrip
   Ncount: 100000
   Trace: no
   Gravitation: no
-  Seed: 1689782920493903
-  Directory: /home/tjh/Github-Repos/MCStas-SQ4-Component/CrI3_scans/mcscript_test_monitorND_A3_m49p365deg
+  Seed: 1689883783349832
+  Directory: /mnt/c/Users/tjh/Documents/GitHub/MCStas-SQ4-Component/CrI3_scans/mcscript_test_monitorND_A3_m49p365deg
   Param: A3=-49.3645
   Param: Ei=30
 end simulation
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(360, 120)
   Source: CrI3_inst (CrI3_inst.instr)
   component: monitor_N
@@ -34,9 +34,9 @@ begin data
   title:  Intensity Angle Energy Monitor (Banana) [out] per bin
   Ncount: 200000
   filename: banana_det_theta_E.dat
-  statistics: X0=-2.1061; dX=2.02139; Y0=27.9695; dY=1.31094;
-  signal: Min=0; Max=7.08024; Mean=0.00405595;
-  values: 175.217 2.89851 10561
+  statistics: X0=0.212545; dX=13.9336; Y0=21.0773; dY=5.96959;
+  signal: Min=0; Max=2.68951; Mean=0.0113447;
+  values: 490.091 5.59048 10573
   xvar: Lo
   yvar: En
   xlabel: Longitude [deg]
@@ -48,7 +48,7 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
@@ -56,9 +56,9 @@ begin data
   title: qa vs qb monitor E Sum
   Ncount: 200000
   filename: qa_vs_qb_Sum.dat
-  statistics: X0=4.37611e-05; dX=0.00273528; Y0=4.85887e-05; dY=0.00316569;
-  signal: Min=0; Max=463763; Mean=45.4797;
-  values: 463939 1550.78 99994
+  statistics: X0=-5.95449e-05; dX=0.0220837; Y0=0.00077482; dY=0.029211;
+  signal: Min=0; Max=463413; Mean=45.4762;
+  values: 463903 1550.2 99591
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -70,7 +70,7 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
@@ -79,8 +79,8 @@ begin data
   Ncount: 200000
   filename: qa_vs_qb_0.dat
   statistics: X0=0; dX=0; Y0=0; dY=0;
-  signal: Min=0; Max=463763; Mean=45.4625;
-  values: 463763 1550.78 89432
+  signal: Min=0; Max=463413; Mean=45.4282;
+  values: 463413 1550.19 89365
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -92,17 +92,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 1 ~ 0.423729 meV
+  title: qa vs qb monitor E slice 1 ~ 0.338983 meV
   Ncount: 200000
   filename: qa_vs_qb_1.dat
-  statistics: X0=0.0594059; dX=6.29524e-05; Y0=0.0594059; dY=6.29524e-05;
-  signal: Min=0; Max=9.21439; Mean=0.000903284;
-  values: 9.2144 0.86304 115
+  statistics: X0=0.0594059; dX=0; Y0=0.0594059; dY=0;
+  signal: Min=0; Max=2.41209; Mean=0.000236456;
+  values: 2.41209 0.419892 33
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -114,17 +114,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 2 ~ 0.847458 meV
+  title: qa vs qb monitor E slice 2 ~ 0.677966 meV
   Ncount: 200000
   filename: qa_vs_qb_2.dat
-  statistics: X0=0.0594059; dX=0; Y0=0.0594059; dY=0;
-  signal: Min=0; Max=43.4974; Mean=0.00426404;
-  values: 43.4974 1.34919 1522
+  statistics: X0=0.0413261; dX=0.13887; Y0=0.0613874; dY=0.0152148;
+  signal: Min=0; Max=5.08943; Mean=0.000507376;
+  values: 5.17575 0.688064 61
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -136,17 +136,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 3 ~ 1.27119 meV
+  title: qa vs qb monitor E slice 3 ~ 1.01695 meV
   Ncount: 200000
   filename: qa_vs_qb_3.dat
-  statistics: X0=0.0609393; dX=0.00942012; Y0=0.118812; dY=0;
-  signal: Min=0; Max=9.76833; Mean=0.000982957;
-  values: 10.0271 0.380859 1289
+  statistics: X0=-0.0792993; dX=0.235137; Y0=0.0683039; dY=0.0373804;
+  signal: Min=0; Max=10.5221; Mean=0.00163794;
+  values: 16.7087 1.25555 207
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -158,17 +158,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 4 ~ 1.69492 meV
+  title: qa vs qb monitor E slice 4 ~ 1.35593 meV
   Ncount: 200000
   filename: qa_vs_qb_4.dat
-  statistics: X0=0.118812; dX=0; Y0=0.118812; dY=0;
-  signal: Min=0; Max=39.0965; Mean=0.00383261;
-  values: 39.0965 1.45935 1435
+  statistics: X0=-0.0388026; dX=0.200812; Y0=0.116588; dY=0.0308845;
+  signal: Min=0; Max=9.12815; Mean=0.00285392;
+  values: 29.1128 1.77312 307
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -180,17 +180,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 5 ~ 2.11864 meV
+  title: qa vs qb monitor E slice 5 ~ 1.69492 meV
   Ncount: 200000
   filename: qa_vs_qb_5.dat
-  statistics: X0=0.118812; dX=0; Y0=0.131039; dY=0.0240182;
-  signal: Min=0; Max=41.7767; Mean=0.00515677;
-  values: 52.6042 1.79895 1449
+  statistics: X0=-0.0859539; dX=0.33018; Y0=0.135219; dY=0.0482065;
+  signal: Min=0; Max=4.44957; Mean=0.00113957;
+  values: 11.6248 1.06313 157
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -202,17 +202,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 6 ~ 2.54237 meV
+  title: qa vs qb monitor E slice 6 ~ 2.0339 meV
   Ncount: 200000
   filename: qa_vs_qb_6.dat
-  statistics: X0=0.165288; dX=0.0245135; Y0=0.178218; dY=0;
-  signal: Min=0; Max=9.5261; Mean=0.00119363;
-  values: 12.1762 0.396509 1982
+  statistics: X0=-0.110199; dX=0.327268; Y0=0.155365; dY=0.0507596;
+  signal: Min=0; Max=3.99736; Mean=0.00161909;
+  values: 16.5164 1.21809 238
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -224,17 +224,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 7 ~ 2.9661 meV
+  title: qa vs qb monitor E slice 7 ~ 2.37288 meV
   Ncount: 200000
   filename: qa_vs_qb_7.dat
-  statistics: X0=0.178218; dX=0; Y0=0.193018; dY=0.025694;
-  signal: Min=0; Max=0.155644; Mean=2.03203e-05;
-  values: 0.207288 0.00751989 841
+  statistics: X0=-0.171891; dX=0.343212; Y0=0.196223; dY=0.0466463;
+  signal: Min=0; Max=4.61758; Mean=0.00140791;
+  values: 14.3621 1.10181 227
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -246,17 +246,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 8 ~ 3.38983 meV
+  title: qa vs qb monitor E slice 8 ~ 2.71186 meV
   Ncount: 200000
   filename: qa_vs_qb_8.dat
-  statistics: X0=0.186972; dX=0.0210577; Y0=0.237624; dY=2.63418e-09;
-  signal: Min=0; Max=0.00391144; Mean=4.49709e-07;
-  values: 0.00458748 0.0011595 35
+  statistics: X0=-0.151496; dX=0.365601; Y0=0.199864; dY=0.0541187;
+  signal: Min=0; Max=3.71409; Mean=0.00140401;
+  values: 14.3223 1.07613 233
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -268,17 +268,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 9 ~ 3.81356 meV
+  title: qa vs qb monitor E slice 9 ~ 3.05085 meV
   Ncount: 200000
   filename: qa_vs_qb_9.dat
-  statistics: X0=0.237624; dX=2.63418e-09; Y0=0.287588; dY=0.0217199;
-  signal: Min=0; Max=0.0125462; Mean=1.46231e-06;
-  values: 0.014917 0.00320062 73
+  statistics: X0=-0.144108; dX=0.352341; Y0=0.23859; dY=0.0506596;
+  signal: Min=0; Max=3.19946; Mean=0.00149136;
+  values: 15.2134 1.10053 251
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -290,17 +290,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 10 ~ 4.23729 meV
+  title: qa vs qb monitor E slice 10 ~ 3.38983 meV
   Ncount: 200000
   filename: qa_vs_qb_10.dat
-  statistics: X0=0.237665; dX=0.00156199; Y0=0.29703; dY=3.72529e-09;
-  signal: Min=0; Max=0.00246787; Mean=2.42092e-07;
-  values: 0.00246958 0.000595805 64
+  statistics: X0=-0.150938; dX=0.368648; Y0=0.258347; dY=0.0508186;
+  signal: Min=0; Max=3.78721; Mean=0.00129122;
+  values: 13.1717 1.01833 223
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -312,17 +312,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 11 ~ 4.66102 meV
+  title: qa vs qb monitor E slice 11 ~ 3.72881 meV
   Ncount: 200000
   filename: qa_vs_qb_11.dat
-  statistics: X0=0.295934; dX=0.00799205; Y0=0.304431; dY=0.0196188;
-  signal: Min=0; Max=0.000290584; Mean=3.324e-08;
-  values: 0.000339081 0.000105333 43
+  statistics: X0=-0.132759; dX=0.35654; Y0=0.259565; dY=0.0545782;
+  signal: Min=0; Max=2.87805; Mean=0.00143716;
+  values: 14.6604 1.06643 247
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -334,17 +334,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 12 ~ 5.08475 meV
+  title: qa vs qb monitor E slice 12 ~ 4.0678 meV
   Ncount: 200000
   filename: qa_vs_qb_12.dat
-  statistics: X0=0.29703; dX=0; Y0=0.356436; dY=0;
-  signal: Min=0; Max=1.54336e-05; Mean=1.51295e-09;
-  values: 1.54336e-05 3.44308e-06 31
+  statistics: X0=-0.156585; dX=0.35508; Y0=0.298938; dY=0.0572955;
+  signal: Min=0; Max=3.15643; Mean=0.00144118;
+  values: 14.7015 1.05011 247
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -356,17 +356,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 13 ~ 5.50847 meV
+  title: qa vs qb monitor E slice 13 ~ 4.40678 meV
   Ncount: 200000
   filename: qa_vs_qb_13.dat
-  statistics: X0=0.302886; dX=0.0177086; Y0=0.35699; dY=0.00570931;
-  signal: Min=0; Max=2.70672e-07; Mean=2.94356e-11;
-  values: 3.00273e-07 6.37911e-08 24
+  statistics: X0=-0.128308; dX=0.348183; Y0=0.316454; dY=0.0502687;
+  signal: Min=0; Max=6.92667; Mean=0.0015586;
+  values: 15.8993 1.05703 279
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -378,17 +378,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 14 ~ 5.9322 meV
+  title: qa vs qb monitor E slice 14 ~ 4.74576 meV
   Ncount: 200000
   filename: qa_vs_qb_14.dat
-  statistics: X0=0.356436; dX=0; Y0=0.415842; dY=0;
-  signal: Min=0; Max=1.21161e-07; Mean=1.18774e-11;
-  values: 1.21161e-07 1.37687e-07 3
+  statistics: X0=-0.172278; dX=0.371942; Y0=0.32641; dY=0.0624351;
+  signal: Min=0; Max=5.8968; Mean=0.00126797;
+  values: 12.9346 0.924672 248
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -400,17 +400,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 15 ~ 6.35593 meV
+  title: qa vs qb monitor E slice 15 ~ 5.08475 meV
   Ncount: 200000
   filename: qa_vs_qb_15.dat
-  statistics: X0=0.414817; dX=0.00773548; Y0=0.474223; dY=0.00773548;
-  signal: Min=0; Max=2.46308e-09; Mean=2.45694e-13;
-  values: 2.50632e-09 2.79922e-09 3
+  statistics: X0=-0.573177; dX=0.504486; Y0=0.430645; dY=0.0694073;
+  signal: Min=0; Max=0.870431; Mean=0.000234847;
+  values: 2.39568 0.326579 78
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -422,17 +422,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 16 ~ 6.77966 meV
+  title: qa vs qb monitor E slice 16 ~ 5.42373 meV
   Ncount: 200000
   filename: qa_vs_qb_16.dat
-  statistics: X0=0.423415; dX=0.0198131; Y0=0.523486; dY=0.0232098;
-  signal: Min=0; Max=5.00057; Mean=0.000716119;
-  values: 7.30513 0.397338 1111
+  statistics: X0=-0.979776; dX=0.0850747; Y0=0.503026; dY=0.0324572;
+  signal: Min=0; Max=0.369668; Mean=0.000166748;
+  values: 1.701 0.19808 78
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -444,17 +444,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 17 ~ 7.20339 meV
+  title: qa vs qb monitor E slice 17 ~ 5.76271 meV
   Ncount: 200000
   filename: qa_vs_qb_17.dat
-  statistics: X0=0.417019; dX=0.00828046; Y0=0.527068; dY=0.0198262;
-  signal: Min=0; Max=0.813638; Mean=9.35618e-05;
-  values: 0.954424 0.103736 312
+  statistics: X0=-1.05273; dX=0.223679; Y0=0.560954; dY=0.122244;
+  signal: Min=0; Max=0.271919; Mean=0.000121549;
+  values: 1.23992 0.189864 51
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -466,17 +466,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 18 ~ 7.62712 meV
+  title: qa vs qb monitor E slice 18 ~ 6.10169 meV
   Ncount: 200000
   filename: qa_vs_qb_18.dat
-  statistics: X0=0.481273; dX=0.0179343; Y0=0.594059; dY=0;
-  signal: Min=0; Max=1.70022e-05; Mean=1.85485e-09;
-  values: 1.89214e-05 1.6164e-05 9
+  statistics: X0=-1.31539; dX=0.290083; Y0=0.725035; dY=0.158571;
+  signal: Min=0; Max=0.85875; Mean=0.000328205;
+  values: 3.34802 0.414617 89
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -488,17 +488,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 19 ~ 8.05085 meV
+  title: qa vs qb monitor E slice 19 ~ 6.44068 meV
   Ncount: 200000
   filename: qa_vs_qb_19.dat
-  statistics: X0=0.532597; dX=0.0108605; Y0=0.594059; dY=0;
-  signal: Min=0; Max=0.000193743; Mean=1.96737e-08;
-  values: 0.000200691 6.61265e-05 32
+  statistics: X0=-1.40318; dX=0.313778; Y0=0.784337; dY=0.110019;
+  signal: Min=0; Max=1.07544; Mean=0.000677849;
+  values: 6.91473 0.667344 129
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -510,17 +510,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 20 ~ 8.47458 meV
+  title: qa vs qb monitor E slice 20 ~ 6.77966 meV
   Ncount: 200000
   filename: qa_vs_qb_20.dat
-  statistics: X0=0.578782; dX=0.0259645; Y0=0.641321; dY=0.0239576;
-  signal: Min=0; Max=0.00069588; Mean=9.18328e-08;
-  values: 0.000936786 0.000496875 40
+  statistics: X0=-1.33757; dX=0.434296; Y0=0.765875; dY=0.101457;
+  signal: Min=0; Max=1.06879; Mean=0.000704794;
+  values: 7.18961 0.68164 128
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -532,17 +532,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 21 ~ 8.89831 meV
+  title: qa vs qb monitor E slice 21 ~ 7.11864 meV
   Ncount: 200000
   filename: qa_vs_qb_21.dat
-  statistics: X0=0.594059; dX=1.05367e-08; Y0=0.661672; dY=0.0204983;
-  signal: Min=0; Max=9.0513e-05; Mean=1.02952e-08;
-  values: 0.000105021 0.000101123 4
+  statistics: X0=-1.10844; dX=0.622024; Y0=0.735721; dY=0.0960269;
+  signal: Min=0; Max=2.16277; Mean=0.000830948;
+  values: 8.4765 0.733376 149
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -554,17 +554,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 22 ~ 9.32203 meV
+  title: qa vs qb monitor E slice 22 ~ 7.45763 meV
   Ncount: 200000
   filename: qa_vs_qb_22.dat
-  statistics: X0=0.594059; dX=0; Y0=0.712331; dY=0.0056392;
-  signal: Min=0; Max=7.3922e-06; Mean=7.31305e-10;
-  values: 7.46004e-06 2.34103e-06 14
+  statistics: X0=-0.682879; dX=0.674998; Y0=0.652863; dY=0.105602;
+  signal: Min=0; Max=0.936555; Mean=0.000737542;
+  values: 7.52366 0.639887 153
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -576,17 +576,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 23 ~ 9.74576 meV
+  title: qa vs qb monitor E slice 23 ~ 7.79661 meV
   Ncount: 200000
   filename: qa_vs_qb_23.dat
-  statistics: X0=0.645297; dX=0.0204582; Y0=0.712871; dY=1.05367e-08;
-  signal: Min=0; Max=7.25847e-08; Mean=8.24984e-12;
-  values: 8.41566e-08 6.4294e-08 5
+  statistics: X0=-0.488806; dX=0.493333; Y0=0.610844; dY=0.103994;
+  signal: Min=0; Max=2.73167; Mean=0.00134584;
+  values: 13.729 0.83614 294
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -598,17 +598,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 24 ~ 10.1695 meV
+  title: qa vs qb monitor E slice 24 ~ 8.13559 meV
   Ncount: 200000
   filename: qa_vs_qb_24.dat
-  statistics: X0=0.653469; dX=0.000493111; Y0=0.772281; dY=0.000493111;
-  signal: Min=0; Max=1.11455e-08; Mean=1.09267e-12;
-  values: 1.11463e-08 8.51237e-09 3
+  statistics: X0=-0.474459; dX=0.475957; Y0=0.628858; dY=0.0923443;
+  signal: Min=0; Max=1.59698; Mean=0.00122597;
+  values: 12.5062 0.775035 312
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -620,17 +620,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 25 ~ 10.5932 meV
+  title: qa vs qb monitor E slice 25 ~ 8.47458 meV
   Ncount: 200000
   filename: qa_vs_qb_25.dat
-  statistics: X0=0; dX=0; Y0=0; dY=0;
-  signal: Min=0; Max=0; Mean=0;
-  values: 0 0 0
+  statistics: X0=-0.386778; dX=0.487952; Y0=0.648648; dY=0.0813366;
+  signal: Min=0; Max=2.13215; Mean=0.00106473;
+  values: 10.8614 0.711758 294
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -642,17 +642,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 26 ~ 11.0169 meV
+  title: qa vs qb monitor E slice 26 ~ 8.81356 meV
   Ncount: 200000
   filename: qa_vs_qb_26.dat
-  statistics: X0=0; dX=0; Y0=0; dY=0;
-  signal: Min=0; Max=0; Mean=0;
-  values: 0 0 0
+  statistics: X0=-0.4502; dX=0.530424; Y0=0.68376; dY=0.0901372;
+  signal: Min=0; Max=2.52612; Mean=0.00103758;
+  values: 10.5843 0.715337 283
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -664,17 +664,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 27 ~ 11.4407 meV
+  title: qa vs qb monitor E slice 27 ~ 9.15254 meV
   Ncount: 200000
   filename: qa_vs_qb_27.dat
-  statistics: X0=0; dX=0; Y0=0; dY=0;
-  signal: Min=0; Max=0; Mean=0;
-  values: 0 0 0
+  statistics: X0=-0.614947; dX=0.50779; Y0=0.74652; dY=0.077222;
+  signal: Min=0; Max=1.76457; Mean=0.000705983;
+  values: 7.20174 0.573106 214
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -686,17 +686,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:14 2023 (1689883814)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 28 ~ 11.8644 meV
+  title: qa vs qb monitor E slice 28 ~ 9.49153 meV
   Ncount: 200000
   filename: qa_vs_qb_28.dat
-  statistics: X0=0; dX=0; Y0=0; dY=0;
-  signal: Min=0; Max=0; Mean=0;
-  values: 0 0 0
+  statistics: X0=-0.545925; dX=0.495075; Y0=0.747379; dY=0.074193;
+  signal: Min=0; Max=1.58142; Mean=0.000901672;
+  values: 9.19796 0.593312 282
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -708,17 +708,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 29 ~ 12.2881 meV
+  title: qa vs qb monitor E slice 29 ~ 9.83051 meV
   Ncount: 200000
   filename: qa_vs_qb_29.dat
-  statistics: X0=0; dX=0; Y0=0; dY=0;
-  signal: Min=0; Max=0; Mean=0;
-  values: 0 0 0
+  statistics: X0=-0.55725; dX=0.462457; Y0=0.761254; dY=0.0693551;
+  signal: Min=0; Max=1.57172; Mean=0.000635155;
+  values: 6.47921 0.470447 208
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -730,17 +730,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 30 ~ 12.7119 meV
+  title: qa vs qb monitor E slice 30 ~ 10.1695 meV
   Ncount: 200000
   filename: qa_vs_qb_30.dat
-  statistics: X0=0.934603; dX=0.0262969; Y0=1.06949; dY=0.00331802;
-  signal: Min=0; Max=7.0084e-05; Mean=9.41974e-09;
-  values: 9.60907e-05 5.33057e-05 11
+  statistics: X0=-0.367205; dX=0.505115; Y0=0.770095; dY=0.0593659;
+  signal: Min=0; Max=0.368771; Mean=6.99449e-05;
+  values: 0.713508 0.147619 27
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -752,17 +752,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 31 ~ 13.1356 meV
+  title: qa vs qb monitor E slice 31 ~ 10.5085 meV
   Ncount: 200000
   filename: qa_vs_qb_31.dat
-  statistics: X0=0.926274; dX=0.0291927; Y0=1.06931; dY=0;
-  signal: Min=0; Max=1.56849e-07; Mean=2.59603e-11;
-  values: 2.64821e-07 1.1845e-07 5
+  statistics: X0=-1.41503; dX=0.85264; Y0=1.27041; dY=0.48293;
+  signal: Min=0; Max=0.00126245; Mean=4.62741e-07;
+  values: 0.00472042 0.00209402 8
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -774,17 +774,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 32 ~ 13.5593 meV
+  title: qa vs qb monitor E slice 32 ~ 10.8475 meV
   Ncount: 200000
   filename: qa_vs_qb_32.dat
-  statistics: X0=0; dX=0; Y0=0; dY=0;
-  signal: Min=0; Max=0; Mean=0;
-  values: 0 0 0
+  statistics: X0=-1.25299; dX=0.256448; Y0=1.02958; dY=0.163194;
+  signal: Min=0; Max=0.000841575; Mean=1.01874e-07;
+  values: 0.00103921 0.000977055 2
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -796,17 +796,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 33 ~ 13.9831 meV
+  title: qa vs qb monitor E slice 33 ~ 11.1864 meV
   Ncount: 200000
   filename: qa_vs_qb_33.dat
-  statistics: X0=0; dX=0; Y0=0; dY=0;
-  signal: Min=0; Max=0; Mean=0;
-  values: 0 0 0
+  statistics: X0=-0.536616; dX=0.423648; Y0=0.862692; dY=0.0805148;
+  signal: Min=0; Max=0.000787467; Mean=2.34625e-07;
+  values: 0.00239341 0.00119787 7
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -818,17 +818,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 34 ~ 14.4068 meV
+  title: qa vs qb monitor E slice 34 ~ 11.5254 meV
   Ncount: 200000
   filename: qa_vs_qb_34.dat
-  statistics: X0=1.06931; dX=2.10734e-08; Y0=1.20799; dY=0.0280285;
-  signal: Min=0; Max=0.0215888; Mean=3.18005e-06;
-  values: 0.0324397 0.00809555 27
+  statistics: X0=-0.959194; dX=0.545981; Y0=1.05361; dY=0.27179;
+  signal: Min=0; Max=0.000989108; Mean=3.27449e-07;
+  values: 0.0033403 0.00157152 6
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -840,17 +840,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 35 ~ 14.8305 meV
+  title: qa vs qb monitor E slice 35 ~ 11.8644 meV
   Ncount: 200000
   filename: qa_vs_qb_35.dat
-  statistics: X0=1.06931; dX=0; Y0=1.24752; dY=0;
-  signal: Min=0; Max=0.0782013; Mean=7.66604e-06;
-  values: 0.0782013 0.0320115 39
+  statistics: X0=-1.08324; dX=0.680801; Y0=1.14051; dY=0.302204;
+  signal: Min=0; Max=0.00091765; Mean=2.29162e-07;
+  values: 0.00233768 0.00117583 6
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -862,17 +862,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 36 ~ 15.2542 meV
+  title: qa vs qb monitor E slice 36 ~ 12.2034 meV
   Ncount: 200000
   filename: qa_vs_qb_36.dat
-  statistics: X0=1.42574; dX=0; Y0=1.60396; dY=2.10734e-08;
-  signal: Min=0; Max=9.3015e-08; Mean=9.11822e-12;
-  values: 9.3015e-08 9.3015e-08 1
+  statistics: X0=-1.31981; dX=0.628633; Y0=1.31327; dY=0.431167;
+  signal: Min=0; Max=0.00104087; Mean=2.84979e-07;
+  values: 0.00290707 0.00156374 4
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -884,17 +884,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 37 ~ 15.678 meV
+  title: qa vs qb monitor E slice 37 ~ 12.5424 meV
   Ncount: 200000
   filename: qa_vs_qb_37.dat
-  statistics: X0=1.44181; dX=0.0406592; Y0=1.67944; dY=0.0406592;
-  signal: Min=0; Max=4.72089e-06; Mean=5.35358e-10;
-  values: 5.46118e-06 3.45003e-06 12
+  statistics: X0=-0.691216; dX=0.552689; Y0=1.03967; dY=0.186295;
+  signal: Min=0; Max=0.000709949; Mean=1.86188e-07;
+  values: 0.0018993 0.000990414 5
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -906,17 +906,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 38 ~ 16.1017 meV
+  title: qa vs qb monitor E slice 38 ~ 12.8814 meV
   Ncount: 200000
   filename: qa_vs_qb_38.dat
-  statistics: X0=1.43685; dX=0.0231616; Y0=1.67638; dY=0.0288034;
-  signal: Min=0; Max=1.07974e-06; Mean=1.30188e-10;
-  values: 1.32805e-06 9.39828e-07 13
+  statistics: X0=-0.915511; dX=0.203742; Y0=1.07141; dY=0.129383;
+  signal: Min=0; Max=0.000875645; Mean=1.53986e-07;
+  values: 0.00157081 0.00115559 3
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -928,17 +928,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 39 ~ 16.5254 meV
+  title: qa vs qb monitor E slice 39 ~ 13.2203 meV
   Ncount: 200000
   filename: qa_vs_qb_39.dat
-  statistics: X0=1.44806; dX=0.0314566; Y0=1.68571; dY=0.0314627;
-  signal: Min=0; Max=1.02894e-06; Mean=1.55946e-10;
-  values: 1.59081e-06 1.07605e-06 6
+  statistics: X0=-2.18147; dX=0.398226; Y0=1.98076; dY=0.289619;
+  signal: Min=0; Max=0.000905604; Mean=9.90329e-08;
+  values: 0.00101023 0.00107324 2
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -950,17 +950,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 40 ~ 16.9492 meV
+  title: qa vs qb monitor E slice 40 ~ 13.5593 meV
   Ncount: 200000
   filename: qa_vs_qb_40.dat
-  statistics: X0=1.42833; dX=0.0121307; Y0=1.66596; dY=0.0121307;
-  signal: Min=0; Max=2.40841e-07; Mean=2.46859e-11;
-  values: 2.5182e-07 1.45395e-07 5
+  statistics: X0=-1.53702; dX=0.567086; Y0=1.49005; dY=0.270041;
+  signal: Min=0; Max=0.000298706; Mean=4.13444e-08;
+  values: 0.000421754 0.000346113 2
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -972,17 +972,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 41 ~ 17.3729 meV
+  title: qa vs qb monitor E slice 41 ~ 13.8983 meV
   Ncount: 200000
   filename: qa_vs_qb_41.dat
-  statistics: X0=1.54455; dX=0; Y0=1.84158; dY=2.98023e-08;
-  signal: Min=0; Max=1.49835e-10; Mean=1.46882e-14;
-  values: 1.49835e-10 1.49835e-10 1
+  statistics: X0=0; dX=0; Y0=0; dY=0;
+  signal: Min=0; Max=0; Mean=0;
+  values: 0 0 0
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -994,17 +994,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 42 ~ 17.7966 meV
+  title: qa vs qb monitor E slice 42 ~ 14.2373 meV
   Ncount: 200000
   filename: qa_vs_qb_42.dat
-  statistics: X0=1.86048; dX=0.299923; Y0=2.13395; dY=0.354455;
-  signal: Min=0; Max=2.53777e-08; Mean=3.56234e-12;
-  values: 3.63394e-08 2.94635e-08 2
+  statistics: X0=-1.9604; dX=2.98023e-08; Y0=1.84158; dY=0;
+  signal: Min=0; Max=0.000310077; Mean=3.03968e-08;
+  values: 0.000310077 0.000310077 1
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -1016,17 +1016,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 43 ~ 18.2203 meV
+  title: qa vs qb monitor E slice 43 ~ 14.5763 meV
   Ncount: 200000
   filename: qa_vs_qb_43.dat
-  statistics: X0=0; dX=0; Y0=0; dY=0;
-  signal: Min=0; Max=0; Mean=0;
-  values: 0 0 0
+  statistics: X0=0.49252; dX=0.365196; Y0=1.14012; dY=0.0866244;
+  signal: Min=0; Max=3.67073; Mean=0.00129566;
+  values: 13.217 0.889505 226
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -1038,17 +1038,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 44 ~ 18.6441 meV
+  title: qa vs qb monitor E slice 44 ~ 14.9153 meV
   Ncount: 200000
   filename: qa_vs_qb_44.dat
-  statistics: X0=1.90099; dX=0; Y0=2.19802; dY=0;
-  signal: Min=0; Max=6.74033e-07; Mean=6.60752e-11;
-  values: 6.74033e-07 6.74033e-07 1
+  statistics: X0=0.591188; dX=0.436914; Y0=1.20656; dY=0.0827365;
+  signal: Min=0; Max=2.32564; Mean=0.00237909;
+  values: 24.2691 1.17917 450
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -1060,17 +1060,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 45 ~ 19.0678 meV
+  title: qa vs qb monitor E slice 45 ~ 15.2542 meV
   Ncount: 200000
   filename: qa_vs_qb_45.dat
-  statistics: X0=0; dX=0; Y0=0; dY=0;
-  signal: Min=0; Max=0; Mean=0;
-  values: 0 0 0
+  statistics: X0=0.48354; dX=0.555114; Y0=1.23693; dY=0.0726334;
+  signal: Min=0; Max=1.47528; Mean=0.00213314;
+  values: 21.7601 1.02833 503
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -1082,17 +1082,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 46 ~ 19.4915 meV
+  title: qa vs qb monitor E slice 46 ~ 15.5932 meV
   Ncount: 200000
   filename: qa_vs_qb_46.dat
-  statistics: X0=0; dX=0; Y0=0; dY=0;
-  signal: Min=0; Max=0; Mean=0;
-  values: 0 0 0
+  statistics: X0=0.255846; dX=0.658224; Y0=1.26471; dY=0.0747869;
+  signal: Min=0; Max=1.6182; Mean=0.00193228;
+  values: 19.7112 0.91385 554
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -1104,17 +1104,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 47 ~ 19.9153 meV
+  title: qa vs qb monitor E slice 47 ~ 15.9322 meV
   Ncount: 200000
   filename: qa_vs_qb_47.dat
-  statistics: X0=0; dX=0; Y0=0; dY=0;
-  signal: Min=0; Max=0; Mean=0;
-  values: 0 0 0
+  statistics: X0=0.0887338; dX=0.677791; Y0=1.28766; dY=0.07318;
+  signal: Min=0; Max=1.13085; Mean=0.00161476;
+  values: 16.4722 0.826169 506
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -1126,17 +1126,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 48 ~ 20.339 meV
+  title: qa vs qb monitor E slice 48 ~ 16.2712 meV
   Ncount: 200000
   filename: qa_vs_qb_48.dat
-  statistics: X0=0; dX=0; Y0=0; dY=0;
-  signal: Min=0; Max=0; Mean=0;
-  values: 0 0 0
+  statistics: X0=0.172199; dX=0.630364; Y0=1.31471; dY=0.0822343;
+  signal: Min=0; Max=1.82261; Mean=0.00164161;
+  values: 16.746 0.83041 559
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -1148,17 +1148,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 49 ~ 20.7627 meV
+  title: qa vs qb monitor E slice 49 ~ 16.6102 meV
   Ncount: 200000
   filename: qa_vs_qb_49.dat
-  statistics: X0=0; dX=0; Y0=0; dY=0;
-  signal: Min=0; Max=0; Mean=0;
-  values: 0 0 0
+  statistics: X0=-0.057404; dX=0.597632; Y0=1.33246; dY=0.0860767;
+  signal: Min=0; Max=1.72661; Mean=0.00177158;
+  values: 18.0719 0.941923 471
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -1170,17 +1170,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 50 ~ 21.1864 meV
+  title: qa vs qb monitor E slice 50 ~ 16.9492 meV
   Ncount: 200000
   filename: qa_vs_qb_50.dat
-  statistics: X0=0; dX=0; Y0=0; dY=0;
-  signal: Min=0; Max=0; Mean=0;
-  values: 0 0 0
+  statistics: X0=0.0473968; dX=0.627219; Y0=1.36942; dY=0.0966511;
+  signal: Min=0; Max=1.6395; Mean=0.00153335;
+  values: 15.6417 0.88339 355
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -1192,17 +1192,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 51 ~ 21.6102 meV
+  title: qa vs qb monitor E slice 51 ~ 17.2881 meV
   Ncount: 200000
   filename: qa_vs_qb_51.dat
-  statistics: X0=0; dX=0; Y0=0; dY=0;
-  signal: Min=0; Max=0; Mean=0;
-  values: 0 0 0
+  statistics: X0=0.278749; dX=0.693927; Y0=1.43639; dY=0.129801;
+  signal: Min=0; Max=1.41003; Mean=0.00127283;
+  values: 12.9841 0.808296 269
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -1214,17 +1214,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 52 ~ 22.0339 meV
+  title: qa vs qb monitor E slice 52 ~ 17.6271 meV
   Ncount: 200000
   filename: qa_vs_qb_52.dat
-  statistics: X0=0; dX=0; Y0=0; dY=0;
-  signal: Min=0; Max=0; Mean=0;
-  values: 0 0 0
+  statistics: X0=1.07129; dX=0.379879; Y0=1.64185; dY=0.10394;
+  signal: Min=0; Max=1.46306; Mean=0.000854627;
+  values: 8.71805 0.668021 176
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -1236,17 +1236,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 53 ~ 22.4576 meV
+  title: qa vs qb monitor E slice 53 ~ 17.9661 meV
   Ncount: 200000
   filename: qa_vs_qb_53.dat
-  statistics: X0=0; dX=0; Y0=0; dY=0;
-  signal: Min=0; Max=0; Mean=0;
-  values: 0 0 0
+  statistics: X0=1.19578; dX=0.0962318; Y0=1.70077; dY=0.0657732;
+  signal: Min=0; Max=0.699956; Mean=0.000683527;
+  values: 6.97266 0.594033 149
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -1258,17 +1258,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 54 ~ 22.8814 meV
+  title: qa vs qb monitor E slice 54 ~ 18.3051 meV
   Ncount: 200000
   filename: qa_vs_qb_54.dat
-  statistics: X0=0; dX=0; Y0=0; dY=0;
-  signal: Min=0; Max=0; Mean=0;
-  values: 0 0 0
+  statistics: X0=1.21076; dX=0.0728806; Y0=1.74881; dY=0.059907;
+  signal: Min=0; Max=0.774063; Mean=0.000530042;
+  values: 5.40696 0.525371 117
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -1280,17 +1280,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 55 ~ 23.3051 meV
+  title: qa vs qb monitor E slice 55 ~ 18.6441 meV
   Ncount: 200000
   filename: qa_vs_qb_55.dat
-  statistics: X0=0; dX=0; Y0=0; dY=0;
-  signal: Min=0; Max=0; Mean=0;
-  values: 0 0 0
+  statistics: X0=1.23991; dX=0.0826058; Y0=1.77305; dY=0.0390377;
+  signal: Min=0; Max=0.734353; Mean=0.00028077;
+  values: 2.86414 0.386347 64
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -1302,17 +1302,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 56 ~ 23.7288 meV
+  title: qa vs qb monitor E slice 56 ~ 18.9831 meV
   Ncount: 200000
   filename: qa_vs_qb_56.dat
-  statistics: X0=0; dX=0; Y0=0; dY=0;
-  signal: Min=0; Max=0; Mean=0;
-  values: 0 0 0
+  statistics: X0=1.22285; dX=0.16776; Y0=1.75789; dY=0.0343841;
+  signal: Min=0; Max=0.104705; Mean=2.5741e-05;
+  values: 0.262584 0.119417 14
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -1324,17 +1324,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 57 ~ 24.1525 meV
+  title: qa vs qb monitor E slice 57 ~ 19.322 meV
   Ncount: 200000
   filename: qa_vs_qb_57.dat
-  statistics: X0=0; dX=0; Y0=0; dY=0;
-  signal: Min=0; Max=0; Mean=0;
-  values: 0 0 0
+  statistics: X0=-0.922176; dX=0.968616; Y0=1.96284; dY=0.38241;
+  signal: Min=0; Max=0.000497257; Mean=1.50773e-07;
+  values: 0.00153804 0.00069451 12
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -1346,17 +1346,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 58 ~ 24.5763 meV
+  title: qa vs qb monitor E slice 58 ~ 19.661 meV
   Ncount: 200000
   filename: qa_vs_qb_58.dat
-  statistics: X0=0; dX=0; Y0=0; dY=0;
-  signal: Min=0; Max=0; Mean=0;
-  values: 0 0 0
+  statistics: X0=0.654992; dX=1.08093; Y0=1.96403; dY=0.340527;
+  signal: Min=0; Max=0.00128308; Mean=4.12663e-07;
+  values: 0.00420958 0.00169016 16
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
@@ -1368,17 +1368,17 @@ begin data
 end data
 
 begin data
-  Date: Wed Jul 19 12:08:42 2023 (1689782922)
+  Date: Thu Jul 20 16:10:15 2023 (1689883815)
   type: array_2d(101, 101)
   Source: CrI3_inst (CrI3_inst.instr)
   component: sqqw_monitor
   position: 0 0 2
-  title: qa vs qb monitor E slice 59 ~ 25 meV
+  title: qa vs qb monitor E slice 59 ~ 20 meV
   Ncount: 200000
   filename: qa_vs_qb_59.dat
-  statistics: X0=0; dX=0; Y0=0; dY=0;
-  signal: Min=0; Max=0; Mean=0;
-  values: 0 0 0
+  statistics: X0=0.225535; dX=1.23447; Y0=2.02678; dY=0.345399;
+  signal: Min=0; Max=0.000771344; Mean=3.71177e-07;
+  values: 0.00378638 0.00148898 12
   xvar: qa
   yvar: qb
   xlabel: qa [AA^-1]
